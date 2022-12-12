@@ -1,9 +1,15 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ['./**/*.{js,ts,jsx,tsx}'],
+
+
+export default {
+  extract: {
+    include: ['./**/*.html'],
+  },
+  safelist: ['prose', 'prose-sm', 'm-auto'],
+  darkMode: 'class',
+  plugins: [require('windicss/plugin/line-clamp'),require('windicss/plugin/forms')],
   theme: {
     extend: {
-      colors:{
+      colors: {
         white: '#FFFFFF',
         error: '#e55039',
         info: '#3498db',
@@ -24,7 +30,4 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms'),
-  require('@tailwindcss/line-clamp'),
-  require('tailwind-animatecss')],
 };

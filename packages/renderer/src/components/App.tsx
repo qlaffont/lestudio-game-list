@@ -1,8 +1,9 @@
 import '../../assets/index.scss';
+import 'virtual:windi.css';
 
 const App = () => {
   return <h1 className="text-3xl font-bold underline">
-    Hello world!
+    Hellow teeee !
   </h1>;
 };
 
