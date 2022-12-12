@@ -31,29 +31,29 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       - run: pnpm run test:${{ matrix.package }} --if-present
 
-  e2e:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 6.32.9
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: 'pnpm'
-      - run: pnpm i
-        env:
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+  # e2e:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [ windows-latest, ubuntu-latest, macos-latest ]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: pnpm/action-setup@v2
+  #       with:
+  #         version: 6.32.9
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+  #         cache: 'pnpm'
+  #     - run: pnpm i
+  #       env:
+  #         PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
-        # I ran into problems trying to run an electron window in ubuntu due to a missing graphics server.
-        # That's why this special command for Ubuntu is here
-      - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- pnpm run test:e2e --if-present
-        if: matrix.os == 'ubuntu-latest'
+  #       # I ran into problems trying to run an electron window in ubuntu due to a missing graphics server.
+  #       # That's why this special command for Ubuntu is here
+  #     - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- pnpm run test:e2e --if-present
+  #       if: matrix.os == 'ubuntu-latest'
 
-      - run: pnpm run test:e2e --if-present
-        if: matrix.os != 'ubuntu-latest'
+  #     - run: pnpm run test:e2e --if-present
+  #       if: matrix.os != 'ubuntu-latest'
