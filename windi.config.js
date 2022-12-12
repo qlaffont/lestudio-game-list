@@ -1,12 +1,10 @@
-
-
 export default {
   extract: {
     include: ['./**/*.html'],
   },
   safelist: ['prose', 'prose-sm', 'm-auto'],
   darkMode: 'class',
-  plugins: [require('windicss/plugin/line-clamp'),require('windicss/plugin/forms')],
+  plugins: [require('windicss/plugin/line-clamp'), require('windicss/plugin/forms')],
   theme: {
     extend: {
       colors: {

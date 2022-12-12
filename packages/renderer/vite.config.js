@@ -44,8 +44,7 @@ const config = {
     environment: 'happy-dom',
   },
   plugins: [
-    react({
-    }),
+    react({}),
     renderer.vite({
       preloadEntry: join(PACKAGE_ROOT, '../preload/src/index.ts'),
     }),

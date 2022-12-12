@@ -15,9 +15,22 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
-  "ignorePatterns": ["node_modules/**", "**/dist/**"],
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "ignorePatterns": [
+    "node_modules/**",
+    "**/dist/**"
+  ],
   "rules": {
+    "prettier/prettier": [
+      "error",
+      {},
+      {
+        "usePrettierrc": true
+      }
+    ],
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
@@ -32,11 +45,17 @@
      * This avoids rare errors in optimized code.
      * @see https://twitter.com/alex_kozack/status/1364210394328408066
      */
-    "semi": ["error", "always"],
+    "semi": [
+      "error",
+      "always"
+    ],
     /**
      * This will make the history of changes in the hit a little cleaner
      */
-    "comma-dangle": ["warn", "always-multiline"],
+    "comma-dangle": [
+      "warn",
+      "always-multiline"
+    ],
     /**
      * Just for beauty
      */
