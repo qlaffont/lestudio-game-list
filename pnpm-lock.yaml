@@ -1,6 +1,8 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@tailwindcss/forms': ^0.5.3
+  '@tailwindcss/line-clamp': ^0.4.2
   '@types/node': 18.11.13
   '@types/react': ^18.0.26
   '@types/react-dom': ^18.0.9
@@ -9,6 +11,7 @@ specifiers:
   '@vitejs/plugin-react': ^3.0.0
   '@vitejs/plugin-vue': 4.0.0
   '@vue/test-utils': 2.2.6
+  animate.css: ^4.1.1
   autoprefixer: ^10.4.13
   cross-env: 7.0.3
   electron: 22.0.0
@@ -24,6 +27,7 @@ specifiers:
   react-dom: ^18.2.0
   sass: ^1.56.2
   simple-git-hooks: 2.8.1
+  tailwind-animatecss: ^1.0.0
   tailwindcss: ^3.2.4
   typescript: 4.9.4
   unplugin-auto-expose: 0.0.4
@@ -40,6 +44,8 @@ dependencies:
   vue: 3.2.45
 
 devDependencies:
+  '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.4
+  '@tailwindcss/line-clamp': 0.4.2_tailwindcss@3.2.4
   '@types/node': 18.11.13
   '@types/react': 18.0.26
   '@types/react-dom': 18.0.9
@@ -47,6 +53,7 @@ devDependencies:
   '@typescript-eslint/parser': 5.46.0_ha6vam6werchizxrnqvarmz2zu
   '@vitejs/plugin-vue': 4.0.0_vite@4.0.0+vue@3.2.45
   '@vue/test-utils': 2.2.6_vue@3.2.45
+  animate.css: 4.1.1
   autoprefixer: 10.4.13_postcss@8.4.20
   cross-env: 7.0.3
   electron: 22.0.0
@@ -59,6 +66,7 @@ devDependencies:
   postcss: 8.4.20
   sass: 1.56.2
   simple-git-hooks: 2.8.1
+  tailwind-animatecss: 1.0.0_iq5aouh3rzjlakxnfnwyh4rvrq
   tailwindcss: 3.2.4_postcss@8.4.20
   typescript: 4.9.4
   unplugin-auto-expose: 0.0.4
@@ -645,6 +653,23 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
+  /@tailwindcss/forms/0.5.3_tailwindcss@3.2.4:
+    resolution: {integrity: sha512-y5mb86JUoiUgBjY/o6FJSFZSEttfb3Q5gllE4xoKjAAD+vBrnIhE4dViwUuow3va8mpH4s9jyUbUbrRGoRdc2Q==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
+    dependencies:
+      mini-svg-data-uri: 1.4.4
+      tailwindcss: 3.2.4_postcss@8.4.20
+    dev: true
+
+  /@tailwindcss/line-clamp/0.4.2_tailwindcss@3.2.4:
+    resolution: {integrity: sha512-HFzAQuqYCjyy/SX9sLGB1lroPzmcnWv1FHkIpmypte10hptf4oPUfucryMKovZh2u0uiS9U5Ty3GghWfEJGwVw==}
+    peerDependencies:
+      tailwindcss: '>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1'
+    dependencies:
+      tailwindcss: 3.2.4_postcss@8.4.20
+    dev: true
+
   /@tootallnate/once/2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
@@ -1123,6 +1148,10 @@ packages:
       fast-json-stable-stringify: 2.1.0
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
+    dev: true
+
+  /animate.css/4.1.1:
+    resolution: {integrity: sha512-+mRmCTv6SbCmtYJCN4faJMNFVNN5EuCTTprDTAo7YzIGji2KADmakjVA3+8mVDkZ2Bf09vayB35lSQIex2+QaQ==}
     dev: true
 
   /ansi-regex/5.0.1:
@@ -2779,6 +2808,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /mini-svg-data-uri/1.4.4:
+    resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
+    hasBin: true
+    dev: true
+
   /minimatch/3.0.4:
     resolution: {integrity: sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==}
     dependencies:
@@ -3047,6 +3081,14 @@ packages:
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.1
+    dev: true
+
+  /postcss-js/3.0.3:
+    resolution: {integrity: sha512-gWnoWQXKFw65Hk/mi2+WTQTHdPD5UJdDXZmX073EY/B3BWnYjO4F4t0VneTCnCGQ5E5GsCdMkzPaTXwl3r5dJw==}
+    engines: {node: '>=10.0'}
+    dependencies:
+      camelcase-css: 2.0.1
+      postcss: 8.4.20
     dev: true
 
   /postcss-js/4.0.0_postcss@8.4.20:
@@ -3448,6 +3490,20 @@ packages:
   /supports-preserve-symlinks-flag/1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  /tailwind-animatecss/1.0.0_iq5aouh3rzjlakxnfnwyh4rvrq:
+    resolution: {integrity: sha512-CHoRvMMR6aTv2fS1A/i6DA8LJkOwzeP0l96sdzuIHu/g79BsGuqQwjOoZS9edFYlJaHZiIwGdmxblm6DdJVK4w==}
+    peerDependencies:
+      animate.css: ^4
+      postcss: ^8
+      tailwindcss: ^3
+    dependencies:
+      animate.css: 4.1.1
+      postcss: 8.4.20
+      postcss-js: 3.0.3
+      postcss-selector-parser: 6.0.10
+      tailwindcss: 3.2.4_postcss@8.4.20
+    dev: true
 
   /tailwindcss/3.2.4_postcss@8.4.20:
     resolution: {integrity: sha512-AhwtHCKMtR71JgeYDaswmZXhPcW9iuI9Sp2LvZPo9upDZ7231ZJ7eA9RaURbhpXGVlrjX4cFNlB4ieTetEb7hQ==}

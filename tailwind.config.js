@@ -2,7 +2,29 @@
 module.exports = {
   content: ['./**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        white: '#FFFFFF',
+        error: '#e55039',
+        info: '#3498db',
+        info2: '#0652DD',
+        success: '#78e08f',
+        warning: '#f6b93b',
+        transparent: 'transparent',
+
+        dark: {
+          100: '#0D0C22',
+          80: '#3D3D4E',
+          60: '#6E6D7A',
+          40: '#9E9EA7',
+          20: '#CFCED3',
+          10: '#E7E7E9',
+          5: '#F3F3F4',
+        },
+      },
+    },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms'),
+  require('@tailwindcss/line-clamp'),
+  require('tailwind-animatecss')],
 };
