@@ -5,7 +5,7 @@
 
 [![GitHub issues by-label](https://img.shields.io/github/issues/cawa-93/vite-electron-builder/help%20wanted?label=issues%20need%20help&logo=github)](https://github.com/cawa-93/vite-electron-builder/issues?q=label%3A%22help+wanted%22+is%3Aopen+is%3Aissue)
 [![Required Node.JS >= v16.13](https://img.shields.io/static/v1?label=node&message=%3E=16.13&logo=node.js&color)](https://nodejs.org/about/releases/)
-[![Required npm >= v8.1](https://img.shields.io/static/v1?label=npm&message=%3E=8.1&logo=npm&color)](https://github.com/npm/cli/releases)
+[![Required pnpm >= v8.1](https://img.shields.io/static/v1?label=pnpm&message=%3E=8.1&logo=pnpm&color)](https://github.com/pnpm/cli/releases)
 
 > Vite+Electron = 🔥
 
@@ -21,12 +21,12 @@ Follow these steps to get started with the template:
 1. Click the **[Use this template](https://github.com/cawa-93/vite-electron-builder/generate)** button (you must be
    logged in) or just clone this repo.
 2. If you want to use another package manager don't forget to edit [`.github/workflows`](/.github/workflows) -- it
-   uses `npm` by default.
+   uses `pnpm` by default.
 
 That's all you need. 😉
 
-**Note**: This template uses npm v7 feature — [**Installing Peer Dependencies
-Automatically**](https://github.com/npm/rfcs/blob/latest/implemented/0025-install-peer-deps.md). If you are using a
+**Note**: This template uses pnpm v7 feature — [**Installing Peer Dependencies
+Automatically**](https://github.com/pnpm/rfcs/blob/latest/implemented/0025-install-peer-deps.md). If you are using a
 different package manager, you may need to install some peerDependencies manually.
 
 **Note**: Find more useful forks [here](https://github.com/cawa-93/vite-electron-builder/discussions/categories/forks).
@@ -58,7 +58,7 @@ Vite provides many useful features, such as: `TypeScript`, `TSX/JSX`, `CSS/JSON 
 - The latest version of TypeScript is used for all the source code.
 - **Vite** supports TypeScript out of the box. However, it does not support type checking.
 - Code formatting rules follow the latest TypeScript recommendations and best practices thanks
-  to [@typescript-eslint/eslint-plugin](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin).
+  to [@typescript-eslint/eslint-plugin](https://www.pnpmjs.com/package/@typescript-eslint/eslint-plugin).
 
 **[See this discussion](https://github.com/cawa-93/vite-electron-builder/discussions/339)** if you want completely
 remove TypeScript.
@@ -86,11 +86,11 @@ See [examples of web pages for different frameworks](https://github.com/vitejs/v
 
 ### Publishing
 
-- Each time you push changes to the `main` branch, the [`release`](.github/workflows/release.yml) workflow starts, which creates a new draft release. For each next commit will be created and replaced artifacts. That way you will always have draft with latest artifacts, and the release can be published once it is ready. 
+- Each time you push changes to the `main` branch, the [`release`](.github/workflows/release.yml) workflow starts, which creates a new draft release. For each next commit will be created and replaced artifacts. That way you will always have draft with latest artifacts, and the release can be published once it is ready.
   - Code signing supported. See [`release` workflow](.github/workflows/release.yml).
   - **Auto-update is supported**. After the release is published, all client applications will download the new version
   and install updates silently.
-  
+
 This template configured for GitHub, but electron-builder supports multiple auto-update servers. See [docs](https://www.electron.build/configuration/publish).
 
 ## How it works
@@ -158,7 +158,7 @@ out of the box.
 
 To do this, use [electron-builder]:
 
-- Using the npm script `compile`: This script is configured to compile the application as quickly as possible. It is not
+- Using the pnpm script `compile`: This script is configured to compile the application as quickly as possible. It is not
   ready for distribution, it is compiled only for the current platform and is used for debugging.
 - Using GitHub Actions: The application is compiled for any platform and ready-to-distribute files are automatically
   added as a draft to the GitHub releases page.
@@ -251,7 +251,7 @@ that need to be loaded.
 By default, there are two modes:
 
 - `production` is used by default
-- `development` is used by `npm run watch` script
+- `development` is used by `pnpm run watch` script
 
 When running the build script, the environment variables are loaded from the following files in your project root:
 

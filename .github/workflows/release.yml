@@ -34,13 +34,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16 # Need for npm >=7.7
-          cache: 'npm'
+          cache: 'pnpm'
 
-      - run: npm ci
+      - run: pnpm ci
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
-      - run: npm run build
+      - run: pnpm run build
 
       - name: Compile artifacts ${{ inputs.dry-run && '' || 'and upload them to github release' }}
         # I use this action because it is capable of retrying multiple times if there are any issues with the distribution server
@@ -50,7 +50,7 @@ jobs:
           max_attempts: 3
           retry_on: error
           shell: 'bash'
-          command: npx --no-install electron-builder --config .electron-builder.config.js --publish ${{ inputs.dry-run && 'never' || 'always' }}
+          command: pnpm dlx --no-install electron-builder --config .electron-builder.config.js --publish ${{ inputs.dry-run && 'never' || 'always' }}
         env:
           # Code Signing params
           # See https://www.electron.build/code-signing
