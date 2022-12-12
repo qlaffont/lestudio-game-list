@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: 16
           cache: 'pnpm'
-      - run: pnpm ci
+      - run: pnpm i
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       - run: pnpm run test:${{ matrix.package }} --if-present
@@ -46,7 +46,7 @@ jobs:
         with:
           node-version: 16
           cache: 'pnpm'
-      - run: pnpm ci
+      - run: pnpm i
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 

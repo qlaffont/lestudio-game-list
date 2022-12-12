@@ -23,7 +23,7 @@ jobs:
           node-version: 16 # Need for pnpm >=7.7
           cache: 'pnpm'
 
-      - run: pnpm ci
+      - run: pnpm i
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
