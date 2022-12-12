@@ -27,7 +27,7 @@
     "typecheck:renderer": "vue-tsc --noEmit -p packages/renderer/tsconfig.json",
     "typecheck": "pnpm run typecheck:main && pnpm run typecheck:preload && pnpm run typecheck:renderer",
     "postinstall": "cross-env ELECTRON_RUN_AS_NODE=1 electron scripts/update-electron-vendors.mjs",
-    "format": "pnpm dlx prettier --write \"**/*.{js,mjs,cjs,ts,mts,cts,vue,json}\""
+    "format": "pnpm dlx prettier --write \"**/*.{js,mjs,cjs,ts,mts,cts,vue}\""
   },
   "devDependencies": {
     "@types/node": "18.11.13",
@@ -43,12 +43,14 @@
     "electron": "22.0.0",
     "electron-builder": "23.6.0",
     "eslint": "8.29.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "9.8.0",
     "happy-dom": "8.1.0",
     "nano-staged": "0.8.0",
     "playwright": "1.27.1",
     "postcss": "^8.4.20",
+    "prettier": "^2.8.1",
     "sass": "^1.56.2",
     "simple-git-hooks": "2.8.1",
     "typescript": "4.9.4",
