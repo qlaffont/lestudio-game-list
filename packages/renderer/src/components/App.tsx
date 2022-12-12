@@ -1,5 +1,9 @@
+import '../../assets/index.scss';
+
 const App = () => {
-  return<p>hello world</p>;
+  return <h1 className="text-3xl font-bold underline">
+    Hello world!
+  </h1>;
 };
 
 export default App;
