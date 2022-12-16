@@ -46,6 +46,7 @@ type SelectProps = {
   instanceId?;
   id?;
   selectRef?;
+  hideMenuIfNoOptions?: boolean;
 };
 
 export const SelectComponent: React.FC<SelectProps> = ({

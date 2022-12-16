@@ -12,7 +12,7 @@ const App = () => {
       <h1 className="text-3xl font-bold flex items-center gap-3">
         <div>
           <img
-            src="../../assets/logo.svg"
+            src="/assets/logo.svg"
             className="text-white w-64"
           />
         </div>
@@ -61,6 +61,7 @@ const App = () => {
             onChange={undefined}
             options={[]}
             disabled={token?.length === 0}
+            hideMenuIfNoOptions={true}
           />
 
           <SelectComponent
@@ -69,6 +70,7 @@ const App = () => {
             onChange={undefined}
             options={[]}
             disabled={token?.length === 0}
+            hideMenuIfNoOptions={true}
           />
 
           <Button className="mx-auto">Submit</Button>
