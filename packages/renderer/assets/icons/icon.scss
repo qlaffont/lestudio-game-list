@@ -17,7 +17,7 @@
     }
   }
 
-  $icons:  "close", "arrow-down";
+  $icons:  "close", "arrow-down", 'eye', 'eye-full';
 
   @each $icon in $icons {
     &.icon-#{$icon} {

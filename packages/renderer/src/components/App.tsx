@@ -1,12 +1,41 @@
 import '../../assets/index.scss';
 import 'virtual:windi.css';
 import {Input} from './atoms/Input';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {SelectComponent} from './atoms/Select/Select';
 import {Button} from './atoms/Button';
+import {useDebounce, useInterval} from 'usehooks-ts';
+import {getProcessesList} from '#preload';
 
 const App = () => {
-  const [token, setToken] = useState<string>();
+  const [tokenInput, setTokenInput] = useState<string>();
+  const [process, setProcess] = useState<string>();
+  const tokenDebounced = useDebounce(tokenInput, 300);
+  const [tokenIsDisplayed, setTokenIsDisplayed] = useState<boolean>();
+
+  const [processes, setProcesses] = useState<
+    {
+      processName: string;
+      windowTitle: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      setTokenInput(localStorage.getItem('token'));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (tokenDebounced) {
+      localStorage.setItem('token', tokenDebounced + '');
+    }
+  }, [tokenDebounced]);
+
+  useInterval(() => {
+    (async () => setProcesses(await getProcessesList()))();
+  }, 3000);
+
   return (
     <div className="p-5 space-y-5">
       <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -45,8 +74,11 @@ const App = () => {
         <div>
           <Input
             label="User Token"
-            value={token}
-            onChange={evt => setToken(evt?.target?.value)}
+            value={tokenInput}
+            type={tokenIsDisplayed ? 'text' : 'password'}
+            suffixIcon={tokenIsDisplayed ? 'icon icon-eye-full' : 'icon icon-eye'}
+            onClick={() => setTokenIsDisplayed(v => !v)}
+            onChange={evt => setTokenInput(evt?.target?.value)}
           />
         </div>
 
@@ -57,11 +89,14 @@ const App = () => {
 
           <SelectComponent
             label="Processes"
-            value={undefined}
-            onChange={undefined}
-            options={[]}
-            disabled={token?.length === 0}
-            hideMenuIfNoOptions={true}
+            value={process}
+            onChange={evt => setProcess(evt?.value)}
+            options={processes.map(({processName, windowTitle}) => ({
+              label: `${processName} (${windowTitle})`,
+              value: processName,
+            }))}
+            isClearable
+            disabled={tokenInput?.length === 0}
           />
 
           <SelectComponent
@@ -69,8 +104,7 @@ const App = () => {
             value={undefined}
             onChange={undefined}
             options={[]}
-            disabled={token?.length === 0}
-            hideMenuIfNoOptions={true}
+            disabled={tokenInput?.length === 0}
           />
 
           <Button className="mx-auto">Submit</Button>
