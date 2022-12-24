@@ -5,7 +5,7 @@ import {useEffect, useState} from 'react';
 import {SelectComponent} from './atoms/Select/Select';
 import {Button} from './atoms/Button';
 import {useDebounce, useInterval} from 'usehooks-ts';
-import {getProcessesList} from '#preload';
+import {getProcessesList, getSavedList, getToken, saveToken, setSavedList} from '#preload';
 
 const App = () => {
   const [tokenInput, setTokenInput] = useState<string>();
@@ -19,16 +19,49 @@ const App = () => {
       windowTitle: string;
     }[]
   >([]);
+  const [, setList] = useState<
+    {
+      processName: string;
+      windowTitle: string;
+      igdbId: string;
+    }[]
+  >([]);
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
-      setTokenInput(localStorage.getItem('token'));
-    }
+    //Init app
+    setTokenInput(getToken());
+
+    setSavedList(getSavedList());
+
+    //Fetch indexed games
+    (async () => {
+      let res = await fetch(
+        `https://raw.githubusercontent.com/qlaffont/igdb-game-process-list/main/${'win32'}.json`,
+      );
+
+      res = await res.json();
+
+      setList(
+        res as unknown as {
+          processName: string;
+          windowTitle: string;
+          igdbId: string;
+        }[],
+      );
+
+      setSavedList(
+        res as unknown as {
+          processName: string;
+          windowTitle: string;
+          igdbId: string;
+        }[],
+      );
+    })();
   }, []);
 
   useEffect(() => {
     if (tokenDebounced) {
-      localStorage.setItem('token', tokenDebounced + '');
+      saveToken(tokenDebounced + '');
     }
   }, [tokenDebounced]);
 

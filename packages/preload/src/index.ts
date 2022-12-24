@@ -49,3 +49,31 @@ export const getProcessesList = async (): Promise<{processName: string; windowTi
     });
   }
 };
+
+const Store = require('electron-store');
+
+const schema = {
+  token: {
+    type: 'string',
+  },
+  savedList: {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        processName: {type: 'string'},
+        windowTitle: {type: 'string'},
+        igdbId: {type: 'string'},
+      },
+    },
+  },
+};
+
+const store = new Store({schema});
+
+export const getToken = () => store.get('token');
+export const saveToken = (value: string) => store.set('token', value);
+
+export const getSavedList = () => store.get('savedList');
+export const setSavedList = (value: {processName: string; windowTitle: string; igdbId: string}[]) =>
+  store.set('savedList', value);
