@@ -36,6 +36,8 @@ export const getProcessesList = async (): Promise<{processName: string; windowTi
           reject(err);
         }
 
+        //TODO fix mac issue with process Name Take it completely
+
         resolve(
           uniqBy(
             resultList?.map(item => ({
@@ -69,7 +71,7 @@ const schema = {
   },
 };
 
-const store = new Store({schema});
+const store = new Store({schema, clearInvalidConfig: true});
 
 export const getToken = () => store.get('token');
 export const saveToken = (value: string) => store.set('token', value);

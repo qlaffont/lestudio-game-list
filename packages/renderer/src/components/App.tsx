@@ -1,6 +1,7 @@
 import '../../assets/index.scss';
 import 'virtual:windi.css';
 import {Input} from './atoms/Input';
+import toast from 'react-hot-toast';
 import {useEffect, useState} from 'react';
 import {SelectComponent} from './atoms/Select/Select';
 import {Button} from './atoms/Button';
@@ -31,32 +32,43 @@ const App = () => {
     //Init app
     setTokenInput(getToken());
 
-    setSavedList(getSavedList());
+    setList(getSavedList());
 
     //Fetch indexed games
-    (async () => {
-      let res = await fetch(
-        `https://raw.githubusercontent.com/qlaffont/igdb-game-process-list/main/${'win32'}.json`,
-      );
+    toast.promise(
+      (async () => {
+        let res = await fetch(
+          `https://raw.githubusercontent.com/qlaffont/igdb-game-process-list/main/${'win32'}.json`,
+        );
 
-      res = await res.json();
+        if (!res.ok) {
+          throw new Error('Impossible to fetch');
+        }
 
-      setList(
-        res as unknown as {
-          processName: string;
-          windowTitle: string;
-          igdbId: string;
-        }[],
-      );
+        res = await res.json();
 
-      setSavedList(
-        res as unknown as {
-          processName: string;
-          windowTitle: string;
-          igdbId: string;
-        }[],
-      );
-    })();
+        setList(
+          res as unknown as {
+            processName: string;
+            windowTitle: string;
+            igdbId: string;
+          }[],
+        );
+
+        setSavedList(
+          res as unknown as {
+            processName: string;
+            windowTitle: string;
+            igdbId: string;
+          }[],
+        );
+      })(),
+      {
+        loading: 'Fetching last games...',
+        success: 'Game list updated !',
+        error: 'You are running the last updated game list !',
+      },
+    );
   }, []);
 
   useEffect(() => {
