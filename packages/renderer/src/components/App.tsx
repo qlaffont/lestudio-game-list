@@ -9,9 +9,9 @@ import {useDebounce, useInterval} from 'usehooks-ts';
 import {getProcessesList, getSavedList, getToken, saveToken, setSavedList} from '#preload';
 
 const App = () => {
-  const [tokenInput, setTokenInput] = useState<string>();
+  const [tokenInput, setTokenInput] = useState<string>(getToken() || undefined);
   const [process, setProcess] = useState<string>();
-  const tokenDebounced = useDebounce(tokenInput, 300);
+  const tokenDebounced = useDebounce(tokenInput, 1000);
   const [tokenIsDisplayed, setTokenIsDisplayed] = useState<boolean>();
 
   const [processes, setProcesses] = useState<
@@ -30,8 +30,6 @@ const App = () => {
 
   useEffect(() => {
     //Init app
-    setTokenInput(getToken());
-
     setList(getSavedList());
 
     //Fetch indexed games
@@ -72,8 +70,25 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (tokenDebounced) {
+    if (tokenDebounced && tokenDebounced.length > 0) {
       saveToken(tokenDebounced + '');
+
+      toast.promise(
+        (async () => {
+          const res = await fetch(
+            `https://api.lestudio.qlaffont.com/users/valid?token=${tokenDebounced}`,
+          );
+
+          if (!res.ok) {
+            throw new Error('Impossible to fetch');
+          }
+        })(),
+        {
+          loading: 'Saving...',
+          success: 'Token saved !',
+          error: 'Your token is not valid ! (Settings > Token)',
+        },
+      );
     }
   }, [tokenDebounced]);
 

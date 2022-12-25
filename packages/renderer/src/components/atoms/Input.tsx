@@ -88,7 +88,7 @@ export const Input: React.FC<PropsWithoutRef<InputProps> & RefAttributes<HTMLInp
   }, [error]);
 
   return (
-    <div className={clsx('relative block max-w-xl', className)}>
+    <div className={clsx('relative block', className)}>
       {label && (
         <label
           htmlFor={name}
