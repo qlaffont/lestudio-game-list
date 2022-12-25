@@ -37,13 +37,17 @@ export const getProcessesList = async (): Promise<{processName: string; windowTi
         const containApp = split.find(s => s.includes('.app'));
 
         if (containApp) {
-          return split[0];
+          return split[0] as string;
         } else {
-          return command;
+          return command as string;
         }
       }
 
-      return command.split('/').pop();
+      return command.split('/').pop() as string;
+    };
+
+    const cleanProcessName = (processName: string) => {
+      return processName.trim().split('--')[0].trim().split(' -')[0];
     };
 
     return new Promise((resolve, reject) => {
@@ -55,8 +59,8 @@ export const getProcessesList = async (): Promise<{processName: string; windowTi
         resolve(
           uniqBy(
             resultList?.map(item => ({
-              processName: getProcessName(item.arguments.join(' ')),
-              windowTitle: getProcessName(item.arguments.join(' ')) as string,
+              processName: cleanProcessName(getProcessName(item.arguments.join(' '))),
+              windowTitle: cleanProcessName(getProcessName(item.arguments.join(' '))) as string,
             })),
             'processName',
           ),
