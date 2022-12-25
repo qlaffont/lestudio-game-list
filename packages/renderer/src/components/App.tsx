@@ -8,6 +8,8 @@ import {Button} from './atoms/Button';
 import {useDebounce, useInterval} from 'usehooks-ts';
 import {getProcessesList, getSavedList, getToken, saveToken, setSavedList} from '#preload';
 
+const API_BASE = 'https://api.lestudio.qlaffont.com';
+
 const App = () => {
   const [tokenInput, setTokenInput] = useState<string>(getToken() || undefined);
   const [process, setProcess] = useState<string>();
@@ -75,9 +77,7 @@ const App = () => {
 
       toast.promise(
         (async () => {
-          const res = await fetch(
-            `https://api.lestudio.qlaffont.com/users/valid?token=${tokenDebounced}`,
-          );
+          const res = await fetch(`${API_BASE}/users/valid?token=${tokenDebounced}`);
 
           if (!res.ok) {
             throw new Error('Impossible to fetch');
@@ -164,10 +164,15 @@ const App = () => {
             value={undefined}
             onChange={undefined}
             options={[]}
-            disabled={tokenInput?.length === 0}
+            disabled={!tokenInput || tokenInput?.length === 0 || !process || process?.length === 0}
           />
 
-          <Button className="mx-auto">Submit</Button>
+          <Button
+            className="mx-auto"
+            disabled={!tokenInput || tokenInput?.length === 0 || !process || process?.length === 0}
+          >
+            Submit
+          </Button>
         </div>
       </div>
     </div>

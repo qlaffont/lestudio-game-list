@@ -30,19 +30,33 @@ export const getProcessesList = async (): Promise<{processName: string; windowTi
   } else {
     //Linux / Mac
 
+    const getProcessName = (command: string) => {
+      if (command.startsWith('/Applications/')) {
+        const split = command.replace('/Applications/', '').split('/');
+
+        const containApp = split.find(s => s.includes('.app'));
+
+        if (containApp) {
+          return split[0];
+        } else {
+          return command;
+        }
+      }
+
+      return command.split('/').pop();
+    };
+
     return new Promise((resolve, reject) => {
       ps.lookup({}, (err: Error, resultList: {arguments: string[]}[]) => {
         if (err) {
           reject(err);
         }
 
-        //TODO fix mac issue with process Name Take it completely
-
         resolve(
           uniqBy(
             resultList?.map(item => ({
-              processName: item.arguments[0].split('/').pop() as string,
-              windowTitle: item.arguments[0].split('/').pop() as string,
+              processName: getProcessName(item.arguments.join(' ')),
+              windowTitle: getProcessName(item.arguments.join(' ')) as string,
             })),
             'processName',
           ),
