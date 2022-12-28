@@ -38,7 +38,7 @@ const App = () => {
     toast.promise(
       (async () => {
         let res = await fetch(
-          `https://raw.githubusercontent.com/qlaffont/igdb-game-process-list/main/${'win32'}.json`,
+          `https://raw.githubusercontent.com/qlaffont/igdb-twitch-process-list/main/${'win32'}.json`,
         );
 
         if (!res.ok) {
