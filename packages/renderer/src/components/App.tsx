@@ -2,13 +2,13 @@ import '../../assets/index.scss';
 import 'virtual:windi.css';
 import {Input} from './atoms/Input';
 import toast from 'react-hot-toast';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {SelectComponent} from './atoms/Select/Select';
 import {Button} from './atoms/Button';
 import {useDebounce, useInterval} from 'usehooks-ts';
 import {getProcessesList, getSavedList, getToken, saveToken, setSavedList} from '#preload';
 
-const API_BASE = 'https://api.lestudio.qlaffont.com';
+const API_BASE = 'http://localhost:3000' || 'https://api.lestudio.qlaffont.com';
 
 const App = () => {
   const [tokenInput, setTokenInput] = useState<string>(getToken() || undefined);
@@ -22,13 +22,28 @@ const App = () => {
       windowTitle: string;
     }[]
   >([]);
-  const [, setList] = useState<
+  const [list, setList] = useState<
     {
       processName: string;
       windowTitle: string;
       igdbId: string;
+      twitchCategoryId: string;
     }[]
   >([]);
+
+  const [currentGame, setCurrentGame] = useState<{
+    id: string;
+    name: string;
+    box_art_url: string;
+  }>();
+
+  const detectedGame = useMemo(() => {
+    return list.find(({processName, windowTitle}) =>
+      processes.find(
+        process => process.processName === processName || process.windowTitle === windowTitle,
+      ),
+    );
+  }, [processes, list]);
 
   useEffect(() => {
     //Init app
@@ -52,6 +67,7 @@ const App = () => {
             processName: string;
             windowTitle: string;
             igdbId: string;
+            twitchCategoryId: string;
           }[],
         );
 
@@ -60,6 +76,7 @@ const App = () => {
             processName: string;
             windowTitle: string;
             igdbId: string;
+            twitchCategoryId: string;
           }[],
         );
       })(),
@@ -96,6 +113,31 @@ const App = () => {
     (async () => setProcesses(await getProcessesList()))();
   }, 3000);
 
+  useEffect(() => {
+    if (detectedGame) {
+      (async () => {
+        const res = await fetch(
+          `${API_BASE}/twitch/games/${detectedGame.twitchCategoryId}?token=${tokenDebounced}`,
+        );
+
+        const game = (await res.json()).data.getTwitchGameFromId;
+
+        setCurrentGame(game);
+
+        if (game) {
+          await fetch(
+            `${API_BASE}/twitch/games?twitchCategoryId=${game.id}&token=${tokenDebounced}`,
+            {
+              method: 'POST',
+            },
+          );
+        }
+      })();
+    } else {
+      setCurrentGame(undefined);
+    }
+  }, [detectedGame, tokenDebounced]);
+
   return (
     <div className="p-5 space-y-5">
       <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -110,22 +152,21 @@ const App = () => {
 
       <div className="space-y-5">
         <div className="flex items-center gap-3">
-          <div className="flex justify-center">
-            <img
-              src="https://images.igdb.com/igdb/image/upload/t_cover_big/co4lkq.png"
-              className="max-h-40"
-            />
+          <div className="flex justify-center h-[147px] w-[110px] border">
+            {currentGame?.box_art_url && (
+              <img
+                src={currentGame?.box_art_url?.replace('{width}', '110').replace('{height}', '147')}
+                className="h-[147px] w-[110px]"
+              />
+            )}
           </div>
           <div>
-            <p className="line-clamp-1 font-bold text-2xl">Mwizz</p>
-            <p className="italic line-clamp-1 ">Mwizz.exe</p>
-            <a
-              className="line-clamp-1 underline text-blue-500 hover:opacity-80"
-              href="https://www.igdb.com/games/mwizz"
-              target="_blank"
-            >
-              https://www.igdb.com/games/mwizz
-            </a>
+            <p className="line-clamp-1 font-bold text-2xl">
+              {currentGame?.name || 'Game not detected'}
+            </p>
+            <p className="italic line-clamp-1 ">
+              {detectedGame?.processName || 'No process found'}
+            </p>
           </div>
         </div>
 

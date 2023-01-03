@@ -95,5 +95,6 @@ export const getToken = () => store.get('token');
 export const saveToken = (value: string) => store.set('token', value);
 
 export const getSavedList = () => store.get('savedList');
-export const setSavedList = (value: {processName: string; windowTitle: string; igdbId: string}[]) =>
-  store.set('savedList', value);
+export const setSavedList = (
+  value: {processName: string; windowTitle: string; igdbId: string; twitchCategoryId: string}[],
+) => store.set('savedList', value);
