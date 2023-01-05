@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import {Input} from '../Input';
 
 export const SelectInput = props => {
-  return (
+  return props?.selectProps?.value === undefined || props.selectProps?.value === null ? (
     <Input
       variant="transparent"
       size={props.selectProps.size}
@@ -23,5 +23,7 @@ export const SelectInput = props => {
       value={props.value}
       {...(props?.selectProps?.inputProps || {})}
     />
+  ) : (
+    <></>
   );
 };

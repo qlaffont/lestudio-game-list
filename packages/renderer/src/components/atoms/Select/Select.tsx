@@ -112,7 +112,7 @@ export const SelectComponent: React.FC<SelectProps> = ({
             autoComplete: 'off',
             ...inputProps,
           }}
-          noOptionsMessage={() => <span className="text-sm text-dark-40"></span>}
+          noOptionsMessage={() => <span className="text-sm text-dark-40">Not found</span>}
           loadingMesszage={() => <span className="text-sm text-dark-40">loading...</span>}
           size={size}
           error={error}

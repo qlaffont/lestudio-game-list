@@ -8,11 +8,14 @@ import {Button} from './atoms/Button';
 import {useDebounce, useInterval} from 'usehooks-ts';
 import {getProcessesList, getSavedList, getToken, saveToken, setSavedList} from '#preload';
 
+import debounce from 'debounce-promise';
+
 const API_BASE = 'http://localhost:3000' || 'https://api.lestudio.qlaffont.com';
 
 const App = () => {
   const [tokenInput, setTokenInput] = useState<string>(getToken() || undefined);
   const [process, setProcess] = useState<string>();
+  const [gameId, setGameId] = useState<string>();
   const tokenDebounced = useDebounce(tokenInput, 1000);
   const [tokenIsDisplayed, setTokenIsDisplayed] = useState<boolean>();
 
@@ -201,16 +204,40 @@ const App = () => {
           />
 
           <SelectComponent
-            label="IGDB Game"
-            value={undefined}
-            onChange={undefined}
-            options={[]}
+            label="Twitch Game / Category"
+            value={gameId}
+            onChange={evt => setGameId(evt?.value)}
+            isClearable
+            async
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            loadOptions={debounce(async inputValue => {
+              if (inputValue?.length > 3) {
+                const res = await fetch(
+                  `${API_BASE}/twitch/games?search=${inputValue}&token=${tokenDebounced}`,
+                );
+
+                const games = (await res.json()).data.getTwitchGames;
+
+                return games?.map(v => ({value: v.id, label: v.name}));
+              }
+            }, 500)}
             disabled={!tokenInput || tokenInput?.length === 0 || !process || process?.length === 0}
           />
 
           <Button
             className="mx-auto"
-            disabled={!tokenInput || tokenInput?.length === 0 || !process || process?.length === 0}
+            disabled={
+              !gameId ||
+              gameId?.length === 0 ||
+              !tokenInput ||
+              tokenInput?.length === 0 ||
+              !process ||
+              process?.length === 0
+            }
+            onClick={() => {
+              //TODO : Send to server
+            }}
           >
             Submit
           </Button>

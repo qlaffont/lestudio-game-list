@@ -14,6 +14,7 @@ specifiers:
   autoprefixer: ^10.4.13
   clsx: ^1.2.1
   cross-env: 7.0.3
+  debounce-promise: ^3.1.2
   electron: 22.0.0
   electron-builder: 23.6.0
   electron-store: ^8.1.0
@@ -49,6 +50,7 @@ specifiers:
 dependencies:
   '@vitejs/plugin-react': 3.0.0_vite@4.0.0
   clsx: 1.2.1
+  debounce-promise: 3.1.2
   electron-store: 8.1.0
   electron-updater: 5.3.0
   lodash.uniqby: 4.7.0
@@ -1284,8 +1286,10 @@ packages:
       - supports-color
     dev: true
 
-  /ajv-formats/2.1.1:
+  /ajv-formats/2.1.1_ajv@8.11.2:
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
+    peerDependencies:
+      ajv: ^8.0.0
     peerDependenciesMeta:
       ajv:
         optional: true
@@ -1776,7 +1780,7 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       ajv: 8.11.2
-      ajv-formats: 2.1.1
+      ajv-formats: 2.1.1_ajv@8.11.2
       atomically: 1.7.0
       debounce-fn: 4.0.0
       dot-prop: 6.0.1
@@ -1871,6 +1875,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       mimic-fn: 3.1.0
+    dev: false
+
+  /debounce-promise/3.1.2:
+    resolution: {integrity: sha512-rZHcgBkbYavBeD9ej6sP56XfG53d51CD4dnaw989YX/nZ/ZJfgRx/9ePKmTNiUiyQvh4mtrMoS3OAWW+yoYtpg==}
     dev: false
 
   /debug/2.6.9:
