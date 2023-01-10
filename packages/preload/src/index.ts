@@ -12,6 +12,7 @@ import tasklist from 'tasklist';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import uniqBy from 'lodash.uniqby';
+import {platform} from 'process';
 
 export const getProcessesList = async (): Promise<{processName: string; windowTitle: string}[]> => {
   if (process.platform === 'win32') {
@@ -84,6 +85,19 @@ const schema = {
         processName: {type: 'string'},
         windowTitle: {type: 'string'},
         igdbId: {type: 'string'},
+        twitchCategoryId: {type: 'string'},
+      },
+    },
+  },
+  localList: {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        processName: {type: 'string'},
+        windowTitle: {type: 'string'},
+        igdbId: {type: 'string'},
+        twitchCategoryId: {type: 'string'},
       },
     },
   },
@@ -94,7 +108,17 @@ const store = new Store({schema, clearInvalidConfig: true});
 export const getToken = () => store.get('token');
 export const saveToken = (value: string) => store.set('token', value);
 
-export const getSavedList = () => store.get('savedList');
+export const getSavedList = () => store.get('savedList') || [];
 export const setSavedList = (
   value: {processName: string; windowTitle: string; igdbId: string; twitchCategoryId: string}[],
 ) => store.set('savedList', value);
+
+export const getLocalList = () => store.get('localList') || [];
+export const addToLocalList = (value: {
+  processName: string;
+  windowTitle: string;
+  igdbId: string;
+  twitchCategoryId: string;
+}) => store.set('localList', [...getLocalList(), value]);
+
+export const getPlatform = () => platform;

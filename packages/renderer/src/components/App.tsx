@@ -2,15 +2,24 @@ import '../../assets/index.scss';
 import 'virtual:windi.css';
 import {Input} from './atoms/Input';
 import toast from 'react-hot-toast';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {SelectComponent} from './atoms/Select/Select';
 import {Button} from './atoms/Button';
 import {useDebounce, useInterval} from 'usehooks-ts';
-import {getProcessesList, getSavedList, getToken, saveToken, setSavedList} from '#preload';
+import {
+  addToLocalList,
+  getLocalList,
+  getPlatform,
+  getProcessesList,
+  getSavedList,
+  getToken,
+  saveToken,
+  setSavedList,
+} from '#preload';
 
 import debounce from 'debounce-promise';
 
-const API_BASE = 'http://localhost:3000' || 'https://api.lestudio.qlaffont.com';
+const API_BASE = 'https://api.lestudio.qlaffont.com';
 
 const App = () => {
   const [tokenInput, setTokenInput] = useState<string>(getToken() || undefined);
@@ -18,6 +27,7 @@ const App = () => {
   const [gameId, setGameId] = useState<string>();
   const tokenDebounced = useDebounce(tokenInput, 1000);
   const [tokenIsDisplayed, setTokenIsDisplayed] = useState<boolean>();
+  const [isLoading, setIsLoading] = useState<boolean>();
 
   const [processes, setProcesses] = useState<
     {
@@ -50,13 +60,13 @@ const App = () => {
 
   useEffect(() => {
     //Init app
-    setList(getSavedList());
+    setList([...getLocalList(), ...getSavedList()]);
 
     //Fetch indexed games
     toast.promise(
       (async () => {
         let res = await fetch(
-          `https://raw.githubusercontent.com/qlaffont/igdb-twitch-process-list/main/${'win32'}.json`,
+          `https://raw.githubusercontent.com/qlaffont/igdb-twitch-process-list/main/${getPlatform()}.json`,
         );
 
         if (!res.ok) {
@@ -65,14 +75,15 @@ const App = () => {
 
         res = await res.json();
 
-        setList(
-          res as unknown as {
+        setList([
+          ...getLocalList(),
+          ...(res as unknown as {
             processName: string;
             windowTitle: string;
             igdbId: string;
             twitchCategoryId: string;
-          }[],
-        );
+          }[]),
+        ]);
 
         setSavedList(
           res as unknown as {
@@ -141,6 +152,8 @@ const App = () => {
     }
   }, [detectedGame, tokenDebounced]);
 
+  const selectInputRef = useRef();
+
   return (
     <div className="p-5 space-y-5">
       <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -191,56 +204,107 @@ const App = () => {
         <div className="space-y-3">
           <h2 className="font-xl font-bold">Add game to list</h2>
 
-          <SelectComponent
-            label="Processes"
-            value={process}
-            onChange={evt => setProcess(evt?.value)}
-            options={processes.map(({processName, windowTitle}) => ({
-              label: `${processName} (${windowTitle})`,
-              value: processName,
-            }))}
-            isClearable
-            disabled={tokenInput?.length === 0}
-          />
+          {isLoading ? (
+            <div className="flex items-center justify-center gap-1">
+              <div>
+                <p className="text-center font-bold italic text-sm">Added game in progress...</p>
+              </div>
+              <div>
+                <i className="icon icon-refresh animate bg-white h-4 w-4 block"></i>
+              </div>
+            </div>
+          ) : (
+            <>
+              <SelectComponent
+                label="Processes"
+                value={process}
+                onChange={evt => setProcess(evt?.value)}
+                options={processes.map(({processName, windowTitle}) => ({
+                  label: `${processName} (${windowTitle})`,
+                  value: processName,
+                }))}
+                isClearable
+                disabled={tokenInput?.length === 0}
+                selectRef={selectInputRef}
+              />
 
-          <SelectComponent
-            label="Twitch Game / Category"
-            value={gameId}
-            onChange={evt => setGameId(evt?.value)}
-            isClearable
-            async
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-ignore
-            loadOptions={debounce(async inputValue => {
-              if (inputValue?.length > 3) {
-                const res = await fetch(
-                  `${API_BASE}/twitch/games?search=${inputValue}&token=${tokenDebounced}`,
-                );
+              <SelectComponent
+                label="Twitch Game / Category"
+                value={gameId}
+                onChange={evt => setGameId(evt?.value)}
+                isClearable
+                async
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-ignore
+                loadOptions={debounce(async inputValue => {
+                  if (inputValue?.length > 3) {
+                    const res = await fetch(
+                      `${API_BASE}/twitch/games?search=${inputValue}&token=${tokenDebounced}`,
+                    );
 
-                const games = (await res.json()).data.getTwitchGames;
+                    const games = (await res.json()).data.getTwitchGames;
 
-                return games?.map(v => ({value: v.id, label: v.name}));
-              }
-            }, 500)}
-            disabled={!tokenInput || tokenInput?.length === 0 || !process || process?.length === 0}
-          />
+                    return games?.map(v => ({value: v.id, label: v.name}));
+                  }
+                }, 500)}
+                disabled={
+                  !tokenInput || tokenInput?.length === 0 || !process || process?.length === 0
+                }
+              />
 
-          <Button
-            className="mx-auto"
-            disabled={
-              !gameId ||
-              gameId?.length === 0 ||
-              !tokenInput ||
-              tokenInput?.length === 0 ||
-              !process ||
-              process?.length === 0
-            }
-            onClick={() => {
-              //TODO : Send to server
-            }}
-          >
-            Submit
-          </Button>
+              <Button
+                className="mx-auto"
+                isLoading={isLoading}
+                disabled={
+                  !gameId ||
+                  gameId?.length === 0 ||
+                  !tokenInput ||
+                  tokenInput?.length === 0 ||
+                  !process ||
+                  process?.length === 0
+                }
+                onClick={async () => {
+                  setIsLoading(true);
+
+                  try {
+                    const url = new URL('/twitch/games', API_BASE);
+                    url.searchParams.append('token', tokenDebounced);
+                    url.searchParams.append('twitchCategoryId', gameId);
+                    url.searchParams.append('processName', process);
+                    url.searchParams.append(
+                      'windowTitle',
+                      processes?.find(v => v.processName === process)?.windowTitle,
+                    );
+                    url.searchParams.append('platform', getPlatform());
+                    if (processes?.find(v => v.processName === process)?.processName) {
+                      await fetch(url.toString(), {method: 'PUT'});
+                    } else {
+                      console.log('process not found anymore');
+                    }
+                    // eslint-disable-next-line no-empty
+                  } catch (error) {
+                    console.log(error);
+                  }
+
+                  addToLocalList({
+                    processName: process,
+                    windowTitle: processes?.find(v => v.processName === process)?.windowTitle,
+                    twitchCategoryId: gameId,
+                    igdbId: '',
+                  });
+
+                  setProcess(null);
+                  setGameId(null);
+
+                  setTimeout(() => {
+                    setIsLoading(false);
+                  }, 1000);
+                }}
+              >
+                Submit
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

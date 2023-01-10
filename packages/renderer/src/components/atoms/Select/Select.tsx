@@ -113,13 +113,13 @@ export const SelectComponent: React.FC<SelectProps> = ({
             ...inputProps,
           }}
           noOptionsMessage={() => <span className="text-sm text-dark-40">Not found</span>}
-          loadingMesszage={() => <span className="text-sm text-dark-40">loading...</span>}
+          loadingMessage={() => <span className="text-sm text-dark-40">loading...</span>}
           size={size}
           error={error}
           helperText={helperText}
           isDisabled={disabled}
-          menuPlacement="auto"
-          inputRef={selectRef}
+          menuPlacement="top"
+          ref={selectRef}
           {...props}
         />
       </div>
