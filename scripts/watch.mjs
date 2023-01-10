@@ -8,7 +8,7 @@ import {spawn} from 'child_process';
 const mode = (process.env.MODE = process.env.MODE || 'development');
 
 /** @type {import('vite').LogLevel} */
-const logLevel = 'warn';
+const logLevel = 'info';
 
 /**
  * Setup watcher for `main` package
