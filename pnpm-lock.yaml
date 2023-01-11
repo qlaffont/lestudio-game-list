@@ -27,6 +27,7 @@ specifiers:
   happy-dom: 8.1.0
   lodash.uniqby: ^4.7.0
   nano-staged: 0.8.0
+  neat-csv: ^7.0.0
   playwright: 1.27.1
   postcss: ^8.4.20
   prettier: ^2.8.1
@@ -57,6 +58,7 @@ dependencies:
   electron-store: 8.1.0
   electron-updater: 5.3.0
   lodash.uniqby: 4.7.0
+  neat-csv: 7.0.0
   ps-node: 0.1.6
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -2453,6 +2455,14 @@ packages:
       through2: 3.0.2
     dev: false
 
+  /csv-parser/3.0.0:
+    resolution: {integrity: sha512-s6OYSXAK3IdKqYO33y09jhypG/bSDHPuyCme/IdEHfWpLf/jKcpitVFyOC6UemgGk8v7Q5u2XE0vvwmanxhGlQ==}
+    engines: {node: '>= 10'}
+    hasBin: true
+    dependencies:
+      minimist: 1.2.7
+    dev: false
+
   /dateformat/3.0.3:
     resolution: {integrity: sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==}
     dev: false
@@ -3406,6 +3416,11 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       pump: 3.0.0
+
+  /get-stream/6.0.1:
+    resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
+    engines: {node: '>=10'}
+    dev: false
 
   /get-value/2.0.6:
     resolution: {integrity: sha512-Ln0UQDlxH1BapMu3GPtf7CuYNwRZf2gwCuPqbyG6pB8WfmFpzqcy4xtAaAMUhnNqjMKTiCPZG2oMT3YSx8U2NA==}
@@ -4574,6 +4589,14 @@ packages:
       csv-parser: 2.3.5
       get-stream: 5.2.0
       to-readable-stream: 2.1.0
+    dev: false
+
+  /neat-csv/7.0.0:
+    resolution: {integrity: sha512-ZmiKZNkdqb6hrBU3lDHm52vWXs6CuFPfw6ZoJZNnY7IIpfA1fxM0UPPi+iQpqQo82qcLbsZPwLkQ1cdrMDtwwA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      csv-parser: 3.0.0
+      get-stream: 6.0.1
     dev: false
 
   /neo-async/2.6.2:
