@@ -4,7 +4,9 @@
  * Runs several times for each vite configs and electNODE_ENVron-builder config.
  * @return {string}
  */
+
+const {version} = require('../package.json');
 export function getVersion() {
   const suffix = process.env.NODE_ENV === 'dev' ? `-${Date.now()}` : '';
-  return `${process.env.npm_package_version}${suffix}`;
+  return `${version}${suffix}`;
 }
