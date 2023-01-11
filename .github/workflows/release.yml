@@ -19,7 +19,7 @@ defaults:
 
 
 jobs:
-  draft_release:
+  release:
 
     strategy:
       fail-fast: true
