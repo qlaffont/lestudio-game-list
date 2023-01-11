@@ -44,7 +44,7 @@ jobs:
     needs: [ typechecking, tests ]
     uses: ./.github/workflows/draft-release.yml
   release:
-    if: github.event_name != 'push' && github.ref_name == 'main'
+    if: github.ref_name == 'main'
     needs: [ typechecking, tests ]
     uses: ./.github/workflows/release.yml
 

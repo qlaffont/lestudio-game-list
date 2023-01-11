@@ -7,6 +7,7 @@
 
 import pkg from '../package.json' assert {type: 'json'};
 export function getVersion() {
-  const suffix = process.env.NODE_ENV === 'dev' ? `-${process.env.COMMIT_HASH}` : '';
-  return `${pkg.version.slice(0, 6)}${suffix}`;
+  const suffix =
+    process.env.NODE_ENV === 'dev' ? `-${(process.env.COMMIT_HASH || '').slice(0, 6)}` : '';
+  return `${pkg.version}${suffix}`;
 }
