@@ -45,7 +45,7 @@ jobs:
 
       - run: pnpm run build
 
-      - name: Compile artifacts ${{ inputs.dry-run && '' || 'and upload them to github draft release' }}
+      - name: Compile artifacts and upload them to github draft release
         # I use this action because it is capable of retrying multiple times if there are any issues with the distribution server
         uses: nick-fields/retry@v2
         with:
@@ -53,7 +53,7 @@ jobs:
           max_attempts: 3
           retry_on: error
           shell: 'bash'
-          command: NODE_ENV=dev pnpm dlx electron-builder --config .electron-builder.config.js --publish ${{ inputs.dry-run && 'never' || 'always' }}
+          command: NODE_ENV=dev pnpm dlx electron-builder --config .electron-builder.config.js --publish 'always'
         env:
           # Code Signing params
           # See https://www.electron.build/code-signing
