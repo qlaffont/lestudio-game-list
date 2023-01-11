@@ -41,7 +41,7 @@ jobs:
     uses: ./.github/workflows/tests.yml
   draft_release:
     if: github.ref_name == 'dev'
-    needs: [ typechecking, tests ]
+    needs: [ typechecking ]
     uses: ./.github/workflows/draft-release.yml
   release:
     if: github.ref_name == 'main'
