@@ -1,4 +1,4 @@
-name: Release
+name: Draft Release
 on:
   workflow_call:
     inputs:
@@ -9,7 +9,7 @@ on:
         type: boolean
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: draft-release-${{ github.ref }}
   cancel-in-progress: true
 
 
@@ -19,7 +19,7 @@ defaults:
 
 
 jobs:
-  release:
+  draft_release:
 
     strategy:
       fail-fast: true
@@ -45,7 +45,7 @@ jobs:
 
       - run: pnpm run build
 
-      - name: Compile artifacts and upload them to github release
+      - name: Compile artifacts and upload them to github draft release
         # I use this action because it is capable of retrying multiple times if there are any issues with the distribution server
         uses: nick-fields/retry@v2
         with:
@@ -53,7 +53,7 @@ jobs:
           max_attempts: 3
           retry_on: error
           shell: 'bash'
-          command: pnpm dlx electron-builder --config .electron-builder.config.js --publish 'always'
+          command: COMMIT_HASH=${{ github.sha }} NODE_ENV=dev pnpm dlx electron-builder --config .electron-builder.config.js --publish 'always'
         env:
           # Code Signing params
           # See https://www.electron.build/code-signing
