@@ -9,7 +9,7 @@
  * @see https://www.electron.build/configuration/configuration
  */
 module.exports = async function () {
-  const {getVersion} = await import('./version/getVersion.mjs');
+  const { getVersion } = await import('./version/getVersion.mjs');
 
   return {
     directories: {
@@ -25,5 +25,9 @@ module.exports = async function () {
     linux: {
       target: 'deb',
     },
+    publish: [{
+      provider: 'github',
+      releaseType: process.env.NODE_ENV === 'dev' ? 'draft' : 'release'
+    }]
   };
 };
