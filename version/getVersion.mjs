@@ -5,8 +5,8 @@
  * @return {string}
  */
 
-import {version} from '../package.json';
+import pkg from '../package.json' assert {type: 'json'};
 export function getVersion() {
   const suffix = process.env.NODE_ENV === 'dev' ? `-${Date.now()}` : '';
-  return `${version}${suffix}`;
+  return `${pkg.version}${suffix}`;
 }
