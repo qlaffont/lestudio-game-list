@@ -53,7 +53,7 @@ jobs:
           max_attempts: 3
           retry_on: error
           shell: 'bash'
-          command: NODE_ENV=dev pnpm dlx electron-builder --config .electron-builder.config.js --publish 'always'
+          command: COMMIT_HASH=${{ github.sha }} NODE_ENV=dev pnpm dlx electron-builder --config .electron-builder.config.js --publish 'always'
         env:
           # Code Signing params
           # See https://www.electron.build/code-signing
