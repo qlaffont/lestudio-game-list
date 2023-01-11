@@ -5,7 +5,7 @@
  * @return {string}
  */
 
-const {version} = require('../package.json');
+import {version} from '../package.json';
 export function getVersion() {
   const suffix = process.env.NODE_ENV === 'dev' ? `-${Date.now()}` : '';
   return `${version}${suffix}`;
