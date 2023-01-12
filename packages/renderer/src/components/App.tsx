@@ -158,9 +158,7 @@ const App = () => {
     <div className="p-5 space-y-5">
       <h1 className="text-3xl font-bold flex items-center gap-3">
         <div>
-          <i
-            className="brand bg-logo w-50 h-12 block"
-          />
+          <i className="brand bg-logo w-50 h-12 block" />
         </div>
         <div>Game List</div>
       </h1>
