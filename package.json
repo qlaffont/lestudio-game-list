@@ -1,5 +1,5 @@
 {
-  "name": "lestudio-game-list",
+  "name": "LeStudio Game List",
   "description": "Able to update your twitch category Id by on your processes",
   "version": "1.0.0",
   "private": true,
@@ -8,6 +8,8 @@
     "name": "Quentin Laffont",
     "url": "https://qlaffont.com"
   },
+  "homepage": "https://lestudio.qlaffont.com",
+  "repository": "https://github.com/qlaffont/lestudio-game-list",
   "main": "packages/main/dist/index.cjs",
   "scripts": {
     "build": "pnpm run build:main && pnpm run build:preload && pnpm run build:renderer",
