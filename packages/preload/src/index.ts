@@ -16,7 +16,6 @@ import tasklist from 'tasklist';
 
 export const getProcessesList = async (): Promise<{processName: string; windowTitle: string}[]> => {
   if (process.platform === 'win32') {
-    console.log(tasklist);
     //Windows
     return uniqBy(
       (
