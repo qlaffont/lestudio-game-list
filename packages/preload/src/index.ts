@@ -10,13 +10,11 @@ import * as ps from 'ps-node';
 //@ts-ignore
 import uniqBy from 'lodash.uniqby';
 import {platform} from 'process';
+import tasklist from 'tasklist';
 
 export const getProcessesList = async (): Promise<{processName: string; windowTitle: string}[]> => {
-  if (process.platform === 'win32') {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    const {tasklist} = await import('tasklist');
-
+  if (process.platform !== 'win32') {
+    console.log(tasklist);
     //Windows
     return uniqBy(
       (
