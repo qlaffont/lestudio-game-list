@@ -8,11 +8,11 @@ export {versions} from './versions';
 import * as ps from 'ps-node';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
-import tasklist from 'tasklist';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
 import uniqBy from 'lodash.uniqby';
 import {platform} from 'process';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
+import tasklist from 'tasklist';
 
 export const getProcessesList = async (): Promise<{processName: string; windowTitle: string}[]> => {
   if (process.platform === 'win32') {

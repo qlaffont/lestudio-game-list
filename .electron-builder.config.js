@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TODO: Rewrite this config to ESM
  * But currently electron-builder doesn't support ESM configs
@@ -31,5 +32,6 @@ module.exports = async function () {
         releaseType: process.env.NODE_ENV === 'dev' ? 'draft' : 'release',
       },
     ],
+    productName: 'LeStudio Game List',
   };
 };

@@ -30,3 +30,24 @@
     }
   }
 }
+
+.brand {
+  mask-size: 100% !important;
+  mask-repeat: no-repeat !important;
+  -webkit-mask-size: 100% !important;
+  -webkit-mask-repeat: no-repeat !important;
+
+  $icons:  "logo";
+
+  @each $icon in $icons {
+    &.icon-#{$icon} {
+      mask-image: url('/assets/brands/#{$icon}.svg');
+      -webkit-mask-image: url('/assets/brands/#{$icon}.svg');
+    }
+    &.bg-#{$icon} {
+      background: url('/assets/brands/#{$icon}.svg') no-repeat;
+      background-size: 100%;
+    }
+  }
+}
+
