@@ -17,17 +17,17 @@ export const getProcessesList = async (): Promise<{processName: string; windowTi
     //@ts-ignore
     const tasklist = await import('tasklist');
     try {
-      console.log(await tasklist({
-        verbose: true,
-      }))
-    } catch (error) {
+      console.log(
+        await tasklist({
+          verbose: true,
+        }),
+      );
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
 
-    }
     //Windows
     return uniqBy(
-      (
-        []
-      )?.map((item: {imageName: string; windowTitle: string}) => ({
+      []?.map((item: {imageName: string; windowTitle: string}) => ({
         processName: item.imageName,
         windowTitle: item.windowTitle,
       })),
