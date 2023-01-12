@@ -31,5 +31,6 @@ module.exports = async function () {
         releaseType: process.env.NODE_ENV === 'dev' ? 'draft' : 'release',
       },
     ],
+    productName: "LeStudio Game List"
   };
 };
