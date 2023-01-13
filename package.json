@@ -1,7 +1,7 @@
 {
   "name": "lestudio-game-list",
   "description": "Able to update your twitch category Id by on your processes",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "author": {
     "email": "contact@qlaffont.com",

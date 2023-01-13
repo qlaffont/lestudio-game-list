@@ -70,6 +70,7 @@ const App = () => {
         setVersion(await getCurrentVersion());
         let res = await fetch(
           `https://raw.githubusercontent.com/qlaffont/igdb-twitch-process-list/main/${getPlatform()}.json`,
+          {cache: 'reload'},
         );
 
         if (!res.ok) {
@@ -111,7 +112,9 @@ const App = () => {
 
       toast.promise(
         (async () => {
-          const res = await fetch(`${API_BASE}/users/valid?token=${tokenDebounced}`);
+          const res = await fetch(`${API_BASE}/users/valid?token=${tokenDebounced}`, {
+            cache: 'reload',
+          });
 
           if (!res.ok) {
             throw new Error('Impossible to fetch');
@@ -137,6 +140,7 @@ const App = () => {
       (async () => {
         const res = await fetch(
           `${API_BASE}/twitch/games/${detectedGame.twitchCategoryId}?token=${tokenDebounced}`,
+          {cache: 'reload'},
         );
 
         const game = (await res.json()).data.getTwitchGameFromId;
@@ -244,6 +248,7 @@ const App = () => {
                   if (inputValue?.length > 3) {
                     const res = await fetch(
                       `${API_BASE}/twitch/games?search=${inputValue}&token=${tokenDebounced}`,
+                      {cache: 'reload'},
                     );
 
                     const games = (await res.json()).data.getTwitchGames;
@@ -296,6 +301,17 @@ const App = () => {
                     twitchCategoryId: gameId,
                     igdbId: '',
                   });
+
+                  setList([
+                    ...getLocalList(),
+                    ...getSavedList(),
+                    {
+                      processName: process,
+                      windowTitle: processes?.find(v => v.processName === process)?.windowTitle,
+                      twitchCategoryId: gameId,
+                      igdbId: '',
+                    },
+                  ]);
 
                   setProcess(null);
                   setGameId(null);
