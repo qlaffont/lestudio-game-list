@@ -1,6 +1,7 @@
 import {app, ipcMain} from 'electron';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
+import {autoUpdater} from 'electron-updater';
 
 /**
  * Prevent electron from running multiple instances.
@@ -61,11 +62,7 @@ if (import.meta.env.VITE_AUTO_UPDATE) {
   console.log('Auto Update started...');
   app
     .whenReady()
-    .then(() => import('electron-updater'))
-    .then(dep => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      const {autoUpdater} = dep.default;
+    .then(() => {
       autoUpdater.checkForUpdatesAndNotify();
     })
     .catch(e => console.error('Failed check updates:', e));
