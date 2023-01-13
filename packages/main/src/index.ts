@@ -57,7 +57,8 @@ app
 /**
  * Check for new version of the application - production mode only.
  */
-if (import.meta.env.PROD) {
+if (import.meta.env.AUTO_UPDATE) {
+  console.log('Auto Update started...');
   app
     .whenReady()
     .then(() => import('electron-updater'))
@@ -70,5 +71,5 @@ const Store = require('electron-store');
 Store.initRenderer();
 
 ipcMain.handle('get-version', () => {
-  return app.getVersion();
+  return `${app.getVersion()}${import.meta.env.AUTO_UPDATE ? '-DEV' : ''}`;
 });
