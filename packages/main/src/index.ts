@@ -1,4 +1,4 @@
-import {app} from 'electron';
+import {app, ipcMain} from 'electron';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
 
@@ -57,7 +57,8 @@ app
 /**
  * Check for new version of the application - production mode only.
  */
-if (import.meta.env.PROD) {
+if (import.meta.env.AUTO_UPDATE) {
+  console.log('Auto Update started...');
   app
     .whenReady()
     .then(() => import('electron-updater'))
@@ -68,3 +69,7 @@ if (import.meta.env.PROD) {
 const Store = require('electron-store');
 
 Store.initRenderer();
+
+ipcMain.handle('get-version', () => {
+  return `${app.getVersion()}${!import.meta.env.AUTO_UPDATE ? '-DEV' : ''}`;
+});

@@ -59,10 +59,18 @@ export const getProcessesList = async (): Promise<{processName: string; windowTi
 
         resolve(
           uniqBy(
-            resultList?.map(item => ({
-              processName: cleanProcessName(getProcessName(item.arguments.join(' '))),
-              windowTitle: cleanProcessName(getProcessName(item.arguments.join(' '))) as string,
-            })),
+            resultList
+              ?.map(item => {
+                return {
+                  processName: cleanProcessName(
+                    getProcessName((item?.arguments || ['']).join(' ')),
+                  ),
+                  windowTitle: cleanProcessName(
+                    getProcessName((item?.arguments || ['']).join(' ')),
+                  ) as string,
+                };
+              })
+              ?.filter(v => v.processName?.length === 0),
             'processName',
           ),
         );
@@ -122,3 +130,9 @@ export const addToLocalList = (value: {
 }) => store.set('localList', [...getLocalList(), value]);
 
 export const getPlatform = () => platform;
+
+import {ipcRenderer} from 'electron';
+
+export const getCurrentVersion = async () => {
+  return ipcRenderer.invoke('get-version');
+};
