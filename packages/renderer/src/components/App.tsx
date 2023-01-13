@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import {useEffect, useMemo, useRef, useState} from 'react';
 import {SelectComponent} from './atoms/Select/Select';
 import {Button} from './atoms/Button';
-import {useDebounce, useInterval} from 'usehooks-ts';
+import {useDebounce} from 'usehooks-ts';
 import {
   addToLocalList,
   getLocalList,
