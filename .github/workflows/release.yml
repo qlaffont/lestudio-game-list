@@ -43,7 +43,7 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
-      - run: pnpm run build
+      - run: VITE_AUTO_UPDATE=true pnpm run build
 
       - name: Compile artifacts and upload them to github release
         # I use this action because it is capable of retrying multiple times if there are any issues with the distribution server

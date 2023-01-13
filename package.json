@@ -1,7 +1,7 @@
 {
   "name": "lestudio-game-list",
   "description": "Able to update your twitch category Id by on your processes",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "author": {
     "email": "contact@qlaffont.com",
@@ -30,6 +30,9 @@
     "typecheck": "pnpm run typecheck:main && pnpm run typecheck:preload && pnpm run typecheck:renderer",
     "postinstall": "cross-env ELECTRON_RUN_AS_NODE=1 electron scripts/update-electron-vendors.mjs",
     "format": "pnpm dlx prettier --write \"**/*.{js,mjs,cjs,ts,mts,cts,vue}\""
+  },
+  "build": {
+    "appId": "com.github.qlaffont.lestudiogamelist"
   },
   "devDependencies": {
     "@types/node": "18.11.13",

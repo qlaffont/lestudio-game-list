@@ -57,12 +57,17 @@ app
 /**
  * Check for new version of the application - production mode only.
  */
-if (import.meta.env.AUTO_UPDATE) {
+if (import.meta.env.VITE_AUTO_UPDATE) {
   console.log('Auto Update started...');
   app
     .whenReady()
     .then(() => import('electron-updater'))
-    .then(({autoUpdater}) => autoUpdater.checkForUpdatesAndNotify())
+    .then(dep => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const {autoUpdater} = dep.default;
+      autoUpdater.checkForUpdatesAndNotify();
+    })
     .catch(e => console.error('Failed check updates:', e));
 }
 
@@ -71,5 +76,5 @@ const Store = require('electron-store');
 Store.initRenderer();
 
 ipcMain.handle('get-version', () => {
-  return `${app.getVersion()}${!import.meta.env.AUTO_UPDATE ? '-DEV' : ''}`;
+  return `${app.getVersion()}${!import.meta.env.VITE_AUTO_UPDATE ? '-DEV' : ''}`;
 });

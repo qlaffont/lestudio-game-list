@@ -70,7 +70,7 @@ export const getProcessesList = async (): Promise<{processName: string; windowTi
                   ) as string,
                 };
               })
-              ?.filter(v => v.processName?.length === 0),
+              ?.filter(v => v.processName?.length !== 0),
             'processName',
           ),
         );
