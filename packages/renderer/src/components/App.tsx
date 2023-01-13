@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import '../../assets/index.scss';
 import 'virtual:windi.css';
 import {Input} from './atoms/Input';
@@ -129,11 +130,27 @@ const App = () => {
     }
   }, [tokenDebounced]);
 
-  useInterval(() => {
-    (async () => {
+  useEffect(() => {
+    //@ts-ignore
+    window.fetchProcesses = async () => {
       setProcesses(await getProcessesList());
+      //@ts-ignore
+      window.savedTimeout = setTimeout(() => {
+        //@ts-ignore
+        window.fetchProcesses();
+      }, 10000);
+    };
+
+    (async () => {
+      //@ts-ignore
+      window.fetchProcesses();
     })();
-  }, 3000);
+
+    return () => {
+      //@ts-ignore
+      clearTimeout(window.savedTimeout);
+    };
+  }, []);
 
   useEffect(() => {
     if (detectedGame) {
