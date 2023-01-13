@@ -18,13 +18,9 @@ export const getProcessesList = async (): Promise<{processName: string; windowTi
   if (process.platform === 'win32') {
     //Windows
     return uniqBy(
-      (
-        await tasklist({
-          verbose: true,
-        })
-      )?.map((item: {imageName: string; windowTitle: string}) => ({
+      (await tasklist())?.map((item: {imageName: string; windowTitle: string}) => ({
         processName: item.imageName,
-        windowTitle: item.windowTitle,
+        windowTitle: item.imageName,
       })),
       'processName',
     );
