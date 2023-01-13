@@ -1,4 +1,4 @@
-import {app} from 'electron';
+import {app, ipcMain} from 'electron';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
 
@@ -68,3 +68,7 @@ if (import.meta.env.PROD) {
 const Store = require('electron-store');
 
 Store.initRenderer();
+
+ipcMain.handle('get-version', () => {
+  return app.getVersion();
+});

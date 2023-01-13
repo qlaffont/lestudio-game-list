@@ -15,6 +15,7 @@ import {
   getToken,
   saveToken,
   setSavedList,
+  getCurrentVersion,
 } from '#preload';
 
 import debounce from 'debounce-promise';
@@ -24,6 +25,7 @@ const API_BASE = 'https://api.lestudio.qlaffont.com';
 const App = () => {
   const [tokenInput, setTokenInput] = useState<string>(getToken() || undefined);
   const [process, setProcess] = useState<string>();
+  const [version, setVersion] = useState<string>();
   const [gameId, setGameId] = useState<string>();
   const tokenDebounced = useDebounce(tokenInput, 1000);
   const [tokenIsDisplayed, setTokenIsDisplayed] = useState<boolean>();
@@ -65,6 +67,7 @@ const App = () => {
     //Fetch indexed games
     toast.promise(
       (async () => {
+        setVersion(await getCurrentVersion());
         let res = await fetch(
           `https://raw.githubusercontent.com/qlaffont/igdb-twitch-process-list/main/${getPlatform()}.json`,
         );
@@ -160,7 +163,9 @@ const App = () => {
         <div>
           <i className="brand bg-logo w-50 h-12 block" />
         </div>
-        <div>Game List</div>
+        <div>
+          Game List <span className="text-sm italic">({version})</span>
+        </div>
       </h1>
 
       <div className="space-y-5">
