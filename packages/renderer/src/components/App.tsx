@@ -127,7 +127,9 @@ const App = () => {
   }, [tokenDebounced]);
 
   useInterval(() => {
-    (async () => setProcesses(await getProcessesList()))();
+    (async () => {
+      setProcesses(await getProcessesList());
+    })();
   }, 3000);
 
   useEffect(() => {
