@@ -71,5 +71,5 @@ const Store = require('electron-store');
 Store.initRenderer();
 
 ipcMain.handle('get-version', () => {
-  return `${app.getVersion()}${import.meta.env.AUTO_UPDATE ? '-DEV' : ''}`;
+  return `${app.getVersion()}${!import.meta.env.AUTO_UPDATE ? '-DEV' : ''}`;
 });
