@@ -2,7 +2,7 @@ export default {
   extract: {
     include: ['./**/*.html'],
   },
-  safelist: ['prose', 'prose-sm', 'm-auto'],
+  safelist: ['prose', 'prose-sm', 'm-auto', 'line-clamp-1'],
   darkMode: 'class',
   extend: {
     lineClamp: {
