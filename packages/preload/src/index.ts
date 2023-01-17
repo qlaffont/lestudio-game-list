@@ -128,7 +128,14 @@ export const addToLocalList = (value: {
 export const getPlatform = () => platform;
 
 import {ipcRenderer} from 'electron';
+import type {UpdateInfo} from 'electron-updater';
 
 export const getCurrentVersion = async () => {
   return ipcRenderer.invoke('get-version');
+};
+
+export const onUpdate = async (callback: (version: string) => void) => {
+  return ipcRenderer.on('update_downloaded', (event, {version}: UpdateInfo) => {
+    callback(version);
+  });
 };

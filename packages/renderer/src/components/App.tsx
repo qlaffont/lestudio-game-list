@@ -17,6 +17,7 @@ import {
   saveToken,
   setSavedList,
   getCurrentVersion,
+  onUpdate,
 } from '#preload';
 
 import debounce from 'debounce-promise';
@@ -105,6 +106,10 @@ const App = () => {
         error: 'You are running the last updated game list !',
       },
     );
+
+    onUpdate(version => {
+      toast.success(`New version (${version}) downloaded. Please restart the app !`);
+    });
   }, []);
 
   useEffect(() => {
