@@ -55,7 +55,10 @@ export async function restoreOrCreateWindow() {
   let window = BrowserWindow.getAllWindows().find(w => !w.isDestroyed());
 
   if (window === undefined) {
-    window = await createWindow();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    global.window = await createWindow();
+    window = global.window as unknown as BrowserWindow;
   }
 
   if (window.isMinimized()) {

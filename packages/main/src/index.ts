@@ -1,3 +1,4 @@
+import type {BrowserWindow} from 'electron';
 import {app, ipcMain} from 'electron';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
@@ -62,8 +63,12 @@ if (import.meta.env.VITE_AUTO_UPDATE) {
   console.log('Auto Update started...');
   app
     .whenReady()
-    .then(() => {
-      autoUpdater.checkForUpdatesAndNotify();
+    .then(async () => {
+      await autoUpdater.checkForUpdatesAndNotify();
+
+      autoUpdater.on('update-downloaded', () => {
+        (global.window as unknown as BrowserWindow).webContents.send('update_downloaded');
+      });
     })
     .catch(e => console.error('Failed check updates:', e));
 }
