@@ -4,6 +4,11 @@ export default {
   },
   safelist: ['prose', 'prose-sm', 'm-auto'],
   darkMode: 'class',
+  extend: {
+    lineClamp: {
+      1: '1',
+    },
+  },
   plugins: [require('windicss/plugin/line-clamp'), require('windicss/plugin/forms')],
   theme: {
     extend: {
