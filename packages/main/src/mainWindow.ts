@@ -69,7 +69,7 @@ export async function restoreOrCreateWindow() {
       window.restore();
     }
 
-    if (!window.isVisible()) {
+    if (window.isVisible && !window.isVisible()) {
       window.show();
     }
   }
