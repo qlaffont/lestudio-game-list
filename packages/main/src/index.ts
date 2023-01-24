@@ -1,4 +1,4 @@
-import type {BrowserWindow} from 'electron';
+import {BrowserWindow} from 'electron';
 import {app, ipcMain, Tray} from 'electron';
 import {basename, dirname, resolve} from 'path';
 import './security-restrictions';
@@ -84,7 +84,9 @@ if (import.meta.env.VITE_AUTO_UPDATE) {
       await autoUpdater.checkForUpdatesAndNotify();
 
       autoUpdater.on('update-downloaded', () => {
-        (global.window as unknown as BrowserWindow).webContents.send('update_downloaded');
+        const w = BrowserWindow.getAllWindows().find(w => !w.isDestroyed());
+
+        w!.webContents.send('update_downloaded');
       });
     })
     .catch(e => console.error('Failed check updates:', e));

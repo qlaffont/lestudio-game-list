@@ -117,7 +117,9 @@ const App = () => {
     );
 
     onUpdate(version => {
-      toast.success(`New version (${version}) downloaded. Please restart the app !`);
+      toast.success(`New version (${version}) downloaded. Please restart the app !`, {
+        duration: 10000,
+      });
     });
   }, []);
 

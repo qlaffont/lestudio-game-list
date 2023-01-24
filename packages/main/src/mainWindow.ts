@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {app, BrowserWindow} from 'electron';
 import {join} from 'path';
 import {URL} from 'url';
@@ -6,7 +7,7 @@ async function createWindow() {
   const browserWindow = new BrowserWindow({
     show: false, // Use the 'ready-to-show' event to show the instantiated BrowserWindow.
     width: 500,
-    height: 750,
+    height: 770,
     resizable: false,
     webPreferences: {
       nodeIntegration: false,
@@ -55,14 +56,22 @@ export async function restoreOrCreateWindow() {
   let window = BrowserWindow.getAllWindows().find(w => !w.isDestroyed());
 
   if (window === undefined) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    global.window = await createWindow();
-    window = global.window as unknown as BrowserWindow;
+    window = await createWindow();
+
+    if (['win32', 'darwin'].indexOf(process.platform) !== -1) {
+      window.on('minimize', function (event: {preventDefault: () => void}) {
+        event.preventDefault();
+        window!.hide();
+      });
+    }
   }
 
   if (window.isMinimized()) {
     window.restore();
+  }
+
+  if (!window.isVisible) {
+    window.show();
   }
 
   window.focus();
