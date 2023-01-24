@@ -64,14 +64,14 @@ export async function restoreOrCreateWindow() {
         window!.hide();
       });
     }
-  }
+  } else {
+    if (window.isMinimized()) {
+      window.restore();
+    }
 
-  if (window.isMinimized()) {
-    window.restore();
-  }
-
-  if (!window.isVisible) {
-    window.show();
+    if (!window.isVisible()) {
+      window.show();
+    }
   }
 
   window.focus();
