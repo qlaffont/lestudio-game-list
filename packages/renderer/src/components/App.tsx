@@ -18,6 +18,8 @@ import {
   setSavedList,
   getCurrentVersion,
   onUpdate,
+  getOnBoot,
+  toggleBoot,
 } from '#preload';
 
 import debounce from 'debounce-promise';
@@ -26,6 +28,7 @@ const API_BASE = 'https://api.lestudio.qlaffont.com';
 
 const App = () => {
   const [tokenInput, setTokenInput] = useState<string>(getToken() || undefined);
+  const [checkedBoot, setCheckedBoot] = useState<boolean>();
   const [process, setProcess] = useState<string>();
   const [version, setVersion] = useState<string>();
   const [gameId, setGameId] = useState<string>();
@@ -69,36 +72,42 @@ const App = () => {
     //Fetch indexed games
     toast.promise(
       (async () => {
-        setVersion(await getCurrentVersion());
-        let res = await fetch(
-          `https://raw.githubusercontent.com/qlaffont/igdb-twitch-process-list/main/${getPlatform()}.json`,
-          {cache: 'reload'},
-        );
+        try {
+          setVersion(await getCurrentVersion());
+          setCheckedBoot(await getOnBoot());
+          let res = await fetch(
+            `https://raw.githubusercontent.com/qlaffont/igdb-twitch-process-list/main/${getPlatform()}.json`,
+            {cache: 'reload'},
+          );
 
-        if (!res.ok) {
-          throw new Error('Impossible to fetch');
+          if (!res.ok) {
+            throw new Error('Impossible to fetch');
+          }
+
+          res = await res.json();
+
+          setList([
+            ...getLocalList(),
+            ...(res as unknown as {
+              processName: string;
+              windowTitle: string;
+              igdbId: string;
+              twitchCategoryId: string;
+            }[]),
+          ]);
+
+          setSavedList(
+            res as unknown as {
+              processName: string;
+              windowTitle: string;
+              igdbId: string;
+              twitchCategoryId: string;
+            }[],
+          );
+        } catch (error) {
+          console.log(error);
+          throw error;
         }
-
-        res = await res.json();
-
-        setList([
-          ...getLocalList(),
-          ...(res as unknown as {
-            processName: string;
-            windowTitle: string;
-            igdbId: string;
-            twitchCategoryId: string;
-          }[]),
-        ]);
-
-        setSavedList(
-          res as unknown as {
-            processName: string;
-            windowTitle: string;
-            igdbId: string;
-            twitchCategoryId: string;
-          }[],
-        );
       })(),
       {
         loading: 'Fetching last games...',
@@ -227,6 +236,22 @@ const App = () => {
             onClick={() => setTokenIsDisplayed(v => !v)}
             onChange={evt => setTokenInput(evt?.target?.value)}
           />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="pt-1">
+            <input
+              type="checkbox"
+              checked={checkedBoot}
+              onChange={() => {
+                setCheckedBoot(v => !v);
+                toggleBoot();
+              }}
+            />
+          </div>
+          <div>
+            <p>Start on boot</p>
+          </div>
         </div>
 
         <div className="border" />

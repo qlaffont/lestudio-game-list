@@ -43,6 +43,7 @@ specifiers:
   unplugin-auto-expose: 0.0.4
   usehooks-ts: ^2.9.1
   vite: 4.0.4
+  vite-plugin-static-copy: ^0.13.0
   vite-plugin-windicss: ^1.8.10
   vitest: 0.27.1
   vue: 3.2.45
@@ -95,6 +96,7 @@ devDependencies:
   typescript: 4.9.4
   unplugin-auto-expose: 0.0.4
   vite: 4.0.4_q6swpjbreachjowkqq6ci4femq
+  vite-plugin-static-copy: 0.13.0_vite@4.0.4
   vite-plugin-windicss: 1.8.10_vite@4.0.4
   vitest: 0.27.1_4obtzicmlasvj5ks4jjatvtfa4
   vue-tsc: 1.0.13_typescript@4.9.4
@@ -3325,6 +3327,15 @@ packages:
       jsonfile: 6.1.0
       universalify: 2.0.0
 
+  /fs-extra/11.1.0:
+    resolution: {integrity: sha512-0rcTq621PD5jM/e0a3EJoGC/1TC5ZBCERW82LQuwfGnCa1V8w7dpYH1yNu+SLb6E5dkeCBzKEyLGlFrnr+dUyw==}
+    engines: {node: '>=14.14'}
+    dependencies:
+      graceful-fs: 4.2.8
+      jsonfile: 6.1.0
+      universalify: 2.0.0
+    dev: true
+
   /fs-extra/6.0.1:
     resolution: {integrity: sha512-GnyIkKhhzXZUWFCaJzvyDLEEgDkPfb4/TPvJCJVuS8MWZgoSsErf++QpiAlDnKFcqhRlm+tIOcencCjyJE6ZCA==}
     dependencies:
@@ -6431,6 +6442,19 @@ packages:
       - sugarss
       - supports-color
       - terser
+    dev: true
+
+  /vite-plugin-static-copy/0.13.0_vite@4.0.4:
+    resolution: {integrity: sha512-cln+fvKMgwNBjxQ59QVblmExZrc9gGEdRmfqcPOOGpxT5KInfpkGMvmK4L+kCAeHHSSGNU1bM7BA9PQgaAJc6g==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      vite: ^3.0.0 || ^4.0.0
+    dependencies:
+      chokidar: 3.5.3
+      fast-glob: 3.2.12
+      fs-extra: 11.1.0
+      picocolors: 1.0.0
+      vite: 4.0.4_q6swpjbreachjowkqq6ci4femq
     dev: true
 
   /vite-plugin-windicss/1.8.10_vite@4.0.4:

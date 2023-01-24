@@ -81,6 +81,9 @@ const schema = {
   token: {
     type: 'string',
   },
+  startOnBoot: {
+    type: 'boolean',
+  },
   savedList: {
     type: 'array',
     items: {
@@ -132,6 +135,16 @@ import type {UpdateInfo} from 'electron-updater';
 
 export const getCurrentVersion = async () => {
   return ipcRenderer.invoke('get-version');
+};
+
+export const getOnBoot = async () => {
+  return store.get('startOnBoot');
+};
+
+export const toggleBoot = async () => {
+  const newValue = (await store.get('startOnBoot')) ? false : true;
+  store.set('startOnBoot', newValue);
+  return ipcRenderer.invoke('toggle-boot', newValue);
 };
 
 export const onUpdate = async (callback: (version: string) => void) => {

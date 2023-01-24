@@ -1,5 +1,6 @@
 import type {BrowserWindow} from 'electron';
-import {app, ipcMain} from 'electron';
+import {app, ipcMain, Tray} from 'electron';
+import {basename, dirname, resolve} from 'path';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
 import {autoUpdater} from 'electron-updater';
@@ -41,6 +42,22 @@ app
   .then(restoreOrCreateWindow)
   .catch(e => console.error('Failed create window:', e));
 
+app.whenReady().then(() => {
+  const filepath = require('path').join(__dirname, 'favicon.png');
+  const tray = new Tray(filepath);
+
+  // Call this to modify the context menu
+  // const contextMenu = Menu.buildFromTemplate([]);
+  // tray.setContextMenu(contextMenu);
+  tray.setToolTip(
+    `${app.name} - ${`${app.getVersion()}${!import.meta.env.VITE_AUTO_UPDATE ? '-DEV' : ''}`}`,
+  );
+
+  tray.on('double-click', () => {
+    restoreOrCreateWindow();
+  });
+});
+
 /**
  * Install Vue.js or any other extension in development mode only.
  * Note: You must install `electron-devtools-installer` manually
@@ -79,4 +96,16 @@ Store.initRenderer();
 
 ipcMain.handle('get-version', () => {
   return `${app.getVersion()}${!import.meta.env.VITE_AUTO_UPDATE ? '-DEV' : ''}`;
+});
+
+ipcMain.handle('toggle-boot', (event, value: boolean) => {
+  const appFolder = dirname(process.execPath);
+  const updateExe = resolve(appFolder, '..', 'Update.exe');
+  const exeName = basename(process.execPath);
+
+  app.setLoginItemSettings({
+    openAtLogin: value,
+    path: updateExe,
+    args: ['--processStart', `"${exeName}"`, '--process-start-args', '"--hidden"'],
+  });
 });
