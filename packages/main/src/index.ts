@@ -1,10 +1,8 @@
 import {BrowserWindow} from 'electron';
 import {app, ipcMain, Tray} from 'electron';
-import {basename, dirname, resolve} from 'path';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
 import {autoUpdater} from 'electron-updater';
-
 /**
  * Prevent electron from running multiple instances.
  */
@@ -100,14 +98,16 @@ ipcMain.handle('get-version', () => {
   return `${app.getVersion()}${!import.meta.env.VITE_AUTO_UPDATE ? '-DEV' : ''}`;
 });
 
+const AutoLaunch = require('auto-launch');
 ipcMain.handle('toggle-boot', (event, value: boolean) => {
-  const appFolder = dirname(process.execPath);
-  const updateExe = resolve(appFolder, '..', 'Update.exe');
-  const exeName = basename(process.execPath);
-
-  app.setLoginItemSettings({
-    openAtLogin: value,
-    path: updateExe,
-    args: ['--processStart', `"${exeName}"`, '--process-start-args', '"--hidden"'],
+  const autoLaunch = new AutoLaunch({
+    name: 'LeStudioGameList',
+    path: app.getPath('exe'),
   });
+
+  if (value) {
+    autoLaunch.enable();
+  } else {
+    autoLaunch.disable();
+  }
 });
