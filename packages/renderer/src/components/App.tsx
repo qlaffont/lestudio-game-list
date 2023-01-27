@@ -20,16 +20,29 @@ import {
   onUpdate,
   getOnBoot,
   toggleBoot,
+  getNotFoundAction,
+  saveNotFoundAction,
 } from '#preload';
 
 import debounce from 'debounce-promise';
 
 const API_BASE = 'https://api.lestudio.qlaffont.com';
 
+const selectOptionsNotFound = [
+  {
+    value: 'nothing',
+    label: 'Do nothing',
+  },
+  {
+    value: 'clear',
+    label: 'Remove current category',
+  },
+];
 const App = () => {
   const [tokenInput, setTokenInput] = useState<string>(getToken() || undefined);
   const [checkedBoot, setCheckedBoot] = useState<boolean>();
   const [process, setProcess] = useState<string>();
+  const [notFoundAction, setNotFoundAction] = useState<string>(getNotFoundAction() || 'nothing');
   const [version, setVersion] = useState<string>();
   const [gameId, setGameId] = useState<string>();
   const tokenDebounced = useDebounce(tokenInput, 1000);
@@ -191,8 +204,25 @@ const App = () => {
       })();
     } else {
       setCurrentGame(undefined);
+
+      if (notFoundAction === 'clear') {
+        (async () => {
+          await fetch(
+            `${API_BASE}/twitch/games?twitchCategoryId=undefined&token=${tokenDebounced}`,
+            {
+              method: 'POST',
+            },
+          );
+        })();
+      }
     }
   }, [detectedGame, tokenDebounced]);
+
+  useEffect(() => {
+    if (notFoundAction && notFoundAction.length > 0) {
+      saveNotFoundAction(notFoundAction);
+    }
+  }, [notFoundAction]);
 
   const selectInputRef = useRef();
 
@@ -209,14 +239,16 @@ const App = () => {
 
       <div className="space-y-5">
         <div className="flex items-center gap-3">
-          <div className="flex justify-center h-[147px] w-[110px] border">
-            {currentGame?.box_art_url && (
-              <img
-                src={currentGame?.box_art_url?.replace('{width}', '110').replace('{height}', '147')}
-                className="h-[147px] w-[110px]"
-              />
-            )}
-          </div>
+          <div
+            className="flex justify-center h-[147px] w-[110px] border"
+            style={{
+              background: currentGame?.box_art_url
+                ? `url(${currentGame?.box_art_url
+                    ?.replace('{width}', '110')
+                    .replace('{height}', '147')})`
+                : undefined,
+            }}
+          ></div>
           <div>
             <p className="line-clamp-1 font-bold text-2xl">
               {currentGame?.name || 'Game not detected'}
@@ -237,6 +269,17 @@ const App = () => {
             suffixIcon={tokenIsDisplayed ? 'icon icon-eye-full' : 'icon icon-eye'}
             onClick={() => setTokenIsDisplayed(v => !v)}
             onChange={evt => setTokenInput(evt?.target?.value)}
+          />
+        </div>
+
+        <div>
+          <SelectComponent
+            label="If Game not found :"
+            value={notFoundAction}
+            onChange={evt => setNotFoundAction(evt?.value || 'nothing')}
+            options={selectOptionsNotFound}
+            isSearchable
+            isClearable
           />
         </div>
 

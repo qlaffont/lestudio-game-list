@@ -81,6 +81,9 @@ const schema = {
   token: {
     type: 'string',
   },
+  notFoundAction: {
+    type: 'string',
+  },
   startOnBoot: {
     type: 'boolean',
   },
@@ -110,10 +113,17 @@ const schema = {
   },
 };
 
+//app.getPath('userData')
+
 const store = new Store({schema, clearInvalidConfig: true});
+
+store.delete('');
 
 export const getToken = () => store.get('token');
 export const saveToken = (value: string) => store.set('token', value);
+
+export const getNotFoundAction = () => store.get('notFoundAction');
+export const saveNotFoundAction = (value: string) => store.set('notFoundAction', value);
 
 export const getSavedList = () => store.get('savedList') || [];
 export const setSavedList = (
