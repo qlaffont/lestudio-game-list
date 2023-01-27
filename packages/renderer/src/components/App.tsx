@@ -3,16 +3,14 @@ import '../../assets/index.scss';
 import 'virtual:windi.css';
 import {Input} from './atoms/Input';
 import toast from 'react-hot-toast';
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {SelectComponent} from './atoms/Select/Select';
 import {Button} from './atoms/Button';
 import {useDebounce} from 'usehooks-ts';
 import {
   addToLocalList,
-  getLocalList,
   getPlatform,
   getProcessesList,
-  getSavedList,
   getToken,
   saveToken,
   setSavedList,
@@ -22,6 +20,7 @@ import {
   toggleBoot,
   getNotFoundAction,
   saveNotFoundAction,
+  onNewGame,
 } from '#preload';
 
 import debounce from 'debounce-promise';
@@ -55,33 +54,15 @@ const App = () => {
       windowTitle: string;
     }[]
   >([]);
-  const [list, setList] = useState<
-    {
-      processName: string;
-      windowTitle: string;
-      igdbId: string;
-      twitchCategoryId: string;
-    }[]
-  >([]);
 
   const [currentGame, setCurrentGame] = useState<{
     id: string;
     name: string;
     box_art_url: string;
+    processName: string;
   }>();
 
-  const detectedGame = useMemo(() => {
-    return list.find(({processName, windowTitle}) =>
-      processes.find(
-        process => process.processName === processName || process.windowTitle === windowTitle,
-      ),
-    );
-  }, [processes, list]);
-
   useEffect(() => {
-    //Init app
-    setList([...getLocalList(), ...getSavedList()]);
-
     //Fetch indexed games
     toast.promise(
       (async () => {
@@ -99,17 +80,7 @@ const App = () => {
 
           res = await res.json();
 
-          setList([
-            ...getLocalList(),
-            ...(res as unknown as {
-              processName: string;
-              windowTitle: string;
-              igdbId: string;
-              twitchCategoryId: string;
-            }[]),
-          ]);
-
-          setSavedList(
+          await setSavedList(
             res as unknown as {
               processName: string;
               windowTitle: string;
@@ -133,6 +104,10 @@ const App = () => {
       toast.success(`New version (${version}) downloaded. Please restart the app !`, {
         duration: 10000,
       });
+    });
+
+    onNewGame(game => {
+      setCurrentGame(game);
     });
   }, []);
 
@@ -162,12 +137,13 @@ const App = () => {
   useEffect(() => {
     //@ts-ignore
     window.fetchProcesses = async () => {
+      //@ts-ignore
       setProcesses(await getProcessesList());
       //@ts-ignore
       window.savedTimeout = setTimeout(() => {
         //@ts-ignore
         window.fetchProcesses();
-      }, 10000);
+      }, 5000);
     };
 
     (async () => {
@@ -180,43 +156,6 @@ const App = () => {
       clearTimeout(window.savedTimeout);
     };
   }, []);
-
-  useEffect(() => {
-    if (detectedGame) {
-      (async () => {
-        const res = await fetch(
-          `${API_BASE}/twitch/games/${detectedGame.twitchCategoryId}?token=${tokenDebounced}`,
-          {cache: 'reload'},
-        );
-
-        const game = (await res.json()).data.getTwitchGameFromId;
-
-        setCurrentGame(game);
-
-        if (game) {
-          await fetch(
-            `${API_BASE}/twitch/games?twitchCategoryId=${game.id}&token=${tokenDebounced}`,
-            {
-              method: 'POST',
-            },
-          );
-        }
-      })();
-    } else {
-      setCurrentGame(undefined);
-
-      if (notFoundAction === 'clear') {
-        (async () => {
-          await fetch(
-            `${API_BASE}/twitch/games?twitchCategoryId=undefined&token=${tokenDebounced}`,
-            {
-              method: 'POST',
-            },
-          );
-        })();
-      }
-    }
-  }, [detectedGame, tokenDebounced]);
 
   useEffect(() => {
     if (notFoundAction && notFoundAction.length > 0) {
@@ -253,9 +192,7 @@ const App = () => {
             <p className="line-clamp-1 font-bold text-2xl">
               {currentGame?.name || 'Game not detected'}
             </p>
-            <p className="italic line-clamp-1 ">
-              {detectedGame?.processName || 'No process found'}
-            </p>
+            <p className="italic line-clamp-1 ">{currentGame?.processName || 'No process found'}</p>
           </div>
         </div>
 
@@ -387,23 +324,23 @@ const App = () => {
                     console.log(error);
                   }
 
-                  addToLocalList({
+                  await addToLocalList({
                     processName: process,
                     windowTitle: processes?.find(v => v.processName === process)?.windowTitle,
                     twitchCategoryId: gameId,
                     igdbId: '',
                   });
 
-                  setList([
-                    ...getLocalList(),
-                    ...getSavedList(),
-                    {
-                      processName: process,
-                      windowTitle: processes?.find(v => v.processName === process)?.windowTitle,
-                      twitchCategoryId: gameId,
-                      igdbId: '',
-                    },
-                  ]);
+                  // setList([
+                  //   ...getLocalList(),
+                  //   ...getSavedList(),
+                  //   {
+                  //     processName: process,
+                  //     windowTitle: processes?.find(v => v.processName === process)?.windowTitle,
+                  //     twitchCategoryId: gameId,
+                  //     igdbId: '',
+                  //   },
+                  // ]);
 
                   setProcess(null);
                   setGameId(null);
