@@ -237,6 +237,8 @@ ipcMain.handle('get-processes-list', async () => {
   return processesList;
 });
 
+let lastGame: any = {processName: 'Fake to force reset on boot'};
+
 const updateGame = async () => {
   const token = store.get('token');
   const notFoundAction = store.get('notFoundAction');
@@ -250,6 +252,12 @@ const updateGame = async () => {
         process => process.processName === processName || process.windowTitle === windowTitle,
       ),
     );
+
+    if (detectedGame?.processName === lastGame?.processName) {
+      return;
+    }
+
+    lastGame = detectedGame;
 
     if (detectedGame) {
       const res = await fetch(
@@ -276,6 +284,11 @@ const updateGame = async () => {
             method: 'POST',
           });
         }
+        if (notFoundAction === 'justchatting') {
+          await fetch(`${API_BASE}/twitch/games?twitchCategoryId=509658&token=${token}`, {
+            method: 'POST',
+          });
+        }
       }
     } else {
       const w = BrowserWindow.getAllWindows().find(w => !w.isDestroyed());
@@ -283,6 +296,11 @@ const updateGame = async () => {
       w && w!.webContents.send('current-game', undefined);
       if (notFoundAction === 'clear') {
         await fetch(`${API_BASE}/twitch/games?twitchCategoryId=undefined&token=${token}`, {
+          method: 'POST',
+        });
+      }
+      if (notFoundAction === 'justchatting') {
+        await fetch(`${API_BASE}/twitch/games?twitchCategoryId=509658&token=${token}`, {
           method: 'POST',
         });
       }
