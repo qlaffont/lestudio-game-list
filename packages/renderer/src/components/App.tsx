@@ -36,6 +36,10 @@ const selectOptionsNotFound = [
     value: 'clear',
     label: 'Remove current category',
   },
+  {
+    value: 'justchatting',
+    label: 'Reset to Just Chatting category',
+  },
 ];
 const App = () => {
   const [tokenInput, setTokenInput] = useState<string>(getToken() || undefined);
