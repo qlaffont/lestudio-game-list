@@ -105,7 +105,13 @@ const App = () => {
     );
 
     onUpdate(version => {
-      toast.success(`New version (${version}) downloaded. Please restart the app !`, {
+      let update = `New version (${version}) downloaded. Update in progress !`;
+
+      if (getPlatform() !== 'win32') {
+        update = `New version (${version}) downloaded. Please download it !`;
+      }
+
+      toast.success(update, {
         duration: 10000,
       });
     });

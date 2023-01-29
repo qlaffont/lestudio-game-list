@@ -90,9 +90,11 @@ if (import.meta.env.VITE_AUTO_UPDATE) {
 
         w!.webContents.send('update_downloaded', version);
 
-        setTimeout(() => {
-          autoUpdater.quitAndInstall();
-        }, 10000);
+        if (process.platform === 'win32') {
+          setTimeout(() => {
+            autoUpdater.quitAndInstall();
+          }, 5000);
+        }
       });
     })
     .catch(e => console.error('Failed check updates:', e));
